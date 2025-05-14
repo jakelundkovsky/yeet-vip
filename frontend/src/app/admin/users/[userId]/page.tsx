@@ -3,12 +3,14 @@ import { getUserTransactions, getUsers } from "@/app/utils";
 import { notFound } from "next/navigation";
 
 type Props = {
-  params: { userId: string };
+  params: Promise<{ userId: string }>;
 };
 
 export default async function UserDetailPage({ params }: Props) {
-  const userId = Number(params.userId);
-  if (isNaN(userId)) return notFound();
+  const { userId: userIdString } = await params;
+  if (!userIdString) return notFound();
+
+  const userId = Number(userIdString);
 
   // Optionally fetch user for display (not just transactions)
   const users = await getUsers();
