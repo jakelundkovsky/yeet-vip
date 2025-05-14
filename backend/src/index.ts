@@ -3,6 +3,7 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import { AppDataSource } from './data-source';
 import { User } from './entities/user';
+import { Transaction } from './entities/transaction';
 
 // load environment variables
 dotenv.config();
@@ -41,38 +42,23 @@ app.get('/api/users', async (req, res) => {
     }
 });
 
-// list users endpoint
-app.get('/api/users/:userId/transactions', (req, res) => {
-    // todo: pagination
-    // todo: sort (amount, balance, createdAt)
+// list user transactions endpoint
+app.get('/api/users/:userId/transactions', async (req, res) => {
+    try {
+        const { userId } = req.params;
+        const transactionRepository = AppDataSource.getRepository(Transaction);
+        
+        const transactions = await transactionRepository.find({
+            where: { userId },
+            order: { createdAt: 'DESC' }
+        });
 
-    res.json({ transactions: [
-        {
-            id: 1,
-            amount: 100,
-            userId: 1,
-            createdAt: new Date(),
-        },
-        {
-            id: 2,
-            amount: 200,
-            userId: 1,
-            createdAt: new Date(),
-        },
-        {
-            id: 3,
-            amount: 300,
-            userId: 1,
-            createdAt: new Date(),
-        },
-        {
-            id: 4,
-            amount: 400,
-            userId: 1,
-            createdAt: new Date(),
-        },
-    ]});
-  });
+        res.json({ transactions });
+    } catch (error) {
+        console.error('Error fetching transactions:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
 
 app.post('/api/users/:userId/credit', (req, res) => {
     // todo: credit

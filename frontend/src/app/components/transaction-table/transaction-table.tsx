@@ -23,7 +23,7 @@ export function TransactionTable({ transactions }: Props) {
             <tr key={transaction.id} className="border-t border-gray-700 hover:bg-gray-700">
               <td className="px-6 py-4 text-gray-300">{transaction.id}</td>
               <td className="px-6 py-4 text-gray-300">{transaction.userId}</td>
-              <td className="px-6 py-4 text-gray-300">${transaction.amount.toFixed(2)}</td>
+              <td className="px-6 py-4 text-gray-300">${Number(transaction.amount).toFixed(2)}</td>
               <td className="px-6 py-4 text-gray-300">{new Date(transaction.createdAt).toLocaleDateString()}</td>
             </tr>
           ))}
