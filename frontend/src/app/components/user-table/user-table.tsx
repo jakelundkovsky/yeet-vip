@@ -1,18 +1,43 @@
 'use client';
 
 import { User } from "@/app/types";
-import { updateUserCredit } from "@/app/utils";
-import { useState } from "react";
+import { updateUserCredit, getUsers } from "@/app/utils";
+import { useState, useEffect } from "react";
 
 interface Props {
     users: User[];
 }
 
-export function UserTable({ users }: Props) {
+export function UserTable({ users: initialUsers }: Props) {
   const [showConfirm, setShowConfirm] = useState(false);
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [amount, setAmount] = useState<number>(0);
   const [editingUserId, setEditingUserId] = useState<string | null>(null);
+  const [users, setUsers] = useState<User[]>(initialUsers);
+  const [sortBy, setSortBy] = useState<string>('createdAt');
+  const [sortOrder, setSortOrder] = useState<'ASC' | 'DESC'>('DESC');
+
+  useEffect(() => {
+    const fetchSortedUsers = async () => {
+      const sortedUsers = await getUsers(sortBy, sortOrder);
+      setUsers(sortedUsers);
+    };
+    fetchSortedUsers();
+  }, [sortBy, sortOrder]);
+
+  const handleSort = (field: string) => {
+    if (sortBy === field) {
+      setSortOrder(sortOrder === 'ASC' ? 'DESC' : 'ASC');
+    } else {
+      setSortBy(field);
+      setSortOrder('ASC');
+    }
+  };
+
+  const SortIcon = ({ field }: { field: string }) => {
+    if (sortBy !== field) return <span className="ml-1 text-gray-400">↕</span>;
+    return <span className="ml-1">{sortOrder === 'ASC' ? '↑' : '↓'}</span>;
+  };
 
   const handleShowCreditInput = (user: User, e: React.MouseEvent) => {
     e.stopPropagation();
@@ -42,10 +67,30 @@ export function UserTable({ users }: Props) {
           <thead>
             <tr className="bg-gray-700 text-xs">
               <th className="px-3 py-2 text-left text-gray-200 w-[110px]">ID</th>
-              <th className="px-3 py-2 text-left text-gray-200">Name</th>
-              <th className="px-3 py-2 text-left text-gray-200 w-[160px]">Email</th>
-              <th className="px-3 py-2 text-left text-gray-200">Balance</th>
-              <th className="px-3 py-2 text-left text-gray-200">Created At</th>
+              <th 
+                className="px-3 py-2 text-left text-gray-200 cursor-pointer hover:bg-gray-600"
+                onClick={() => handleSort('name')}
+              >
+                Name <SortIcon field="name" />
+              </th>
+              <th 
+                className="px-3 py-2 text-left text-gray-200 w-[160px] cursor-pointer hover:bg-gray-600"
+                onClick={() => handleSort('email')}
+              >
+                Email <SortIcon field="email" />
+              </th>
+              <th 
+                className="px-3 py-2 text-left text-gray-200 cursor-pointer hover:bg-gray-600"
+                onClick={() => handleSort('balance')}
+              >
+                Balance <SortIcon field="balance" />
+              </th>
+              <th 
+                className="px-3 py-2 text-left text-gray-200 cursor-pointer hover:bg-gray-600"
+                onClick={() => handleSort('createdAt')}
+              >
+                Created At <SortIcon field="createdAt" />
+              </th>
               <th className="px-3 py-2 text-left text-gray-200 w-[80px]">Actions</th>
             </tr>
           </thead>
@@ -105,7 +150,7 @@ export function UserTable({ users }: Props) {
                           className="bg-blue-500 hover:bg-blue-600 text-white px-2 py-0.5 rounded text-xs flex items-center justify-center"
                           title="Credit/Debit"
                         >
-                          <span className="material-icons text-sm whitespace-nowrap">apply credit</span>
+                          <span className="material-icons text-sm whitespace-nowrap">credit</span>
                         </button>
                         <span className="absolute left-1/2 -translate-x-1/2 mt-1 w-max bg-gray-900 text-white text-xs rounded px-2 py-1 opacity-0 group-hover:opacity-100 pointer-events-none z-10">
                           Credit/Debit
