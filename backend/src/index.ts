@@ -45,7 +45,14 @@ app.get('/api/users', (req, res) => {
             role: 'user',
             createdAt: new Date(),
         },
-    ] });
+        {
+            id: 4,
+            name: 'Jane Smith',
+            email: 'jane.smith@example.com',
+            role: 'user',
+            createdAt: new Date(),
+        },
+    ]});
   });
 
 app.post('/api/users/:userId/credit', (req, res) => {
