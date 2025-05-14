@@ -1,15 +1,16 @@
 export interface User {
-    id: number;
+    id: string;
     name: string;
     email: string;
-    role: string;
+    balance: number;
     createdAt: string;
+    updatedAt: string;
 }
 
 export interface Transaction {
-    id: number;
-    userId: number;
+    id: string;
+    userId: string;
     amount: number;
-    type: 'credit' | 'debit';
     createdAt: string;
+    updatedAt: string;
 }

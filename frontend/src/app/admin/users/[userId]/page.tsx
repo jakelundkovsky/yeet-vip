@@ -7,10 +7,8 @@ type Props = {
 };
 
 export default async function UserDetailPage({ params }: Props) {
-  const { userId: userIdString } = await params;
-  if (!userIdString) return notFound();
-
-  const userId = Number(userIdString);
+  const { userId } = await params;
+  if (!userId) return notFound();
 
   // Optionally fetch user for display (not just transactions)
   const users = await getUsers();
