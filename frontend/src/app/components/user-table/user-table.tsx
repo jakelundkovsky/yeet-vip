@@ -37,38 +37,42 @@ export function UserTable({ users }: Props) {
 
   return (
     <>
-      <div className="overflow-x-auto">
-        <table className="min-w-full bg-gray-800 border border-gray-700 rounded-lg">
+      <div className="overflow-x-auto h-full flex flex-col">
+        <table className="min-w-full bg-gray-800 border border-gray-700 rounded-lg flex-1">
           <thead>
-            <tr className="bg-gray-700">
-              <th className="px-6 py-3 text-left text-gray-200">ID</th>
-              <th className="px-6 py-3 text-left text-gray-200">Name</th>
-              <th className="px-6 py-3 text-left text-gray-200">Email</th>
-              <th className="px-6 py-3 text-left text-gray-200">Balance</th>
-              <th className="px-6 py-3 text-left text-gray-200">Created At</th>
-              <th className="px-6 py-3 text-left text-gray-200 w-[280px]">Credit/Debit</th>
+            <tr className="bg-gray-700 text-xs">
+              <th className="px-3 py-2 text-left text-gray-200 w-[110px]">ID</th>
+              <th className="px-3 py-2 text-left text-gray-200">Name</th>
+              <th className="px-3 py-2 text-left text-gray-200 w-[160px]">Email</th>
+              <th className="px-3 py-2 text-left text-gray-200">Balance</th>
+              <th className="px-3 py-2 text-left text-gray-200">Created At</th>
+              <th className="px-3 py-2 text-left text-gray-200 w-[80px]">Actions</th>
             </tr>
           </thead>
           <tbody>
             {users.map((user) => (
               <tr
                 key={user.id}
-                className="border-t border-gray-700 hover:bg-gray-700 cursor-pointer"
+                className="border-t border-gray-700 hover:bg-gray-700 cursor-pointer text-xs"
                 onClick={() => window.open(`/admin/users/${user.id}`, '_blank')}
               >
-                <td className="px-6 py-4 text-gray-300">{user.id}</td>
-                <td className="px-6 py-4 text-gray-300">{user.name}</td>
-                <td className="px-6 py-4 text-gray-300">{user.email}</td>
-                <td className="px-6 py-4 text-gray-300">${Number(user.balance).toFixed(2)}</td>
-                <td className="px-6 py-4 text-gray-300">{new Date(user.createdAt).toLocaleDateString()}</td>
-                <td className="px-6 py-4 text-gray-300">
-                  <div className="flex items-center gap-2 w-[280px]" onClick={e => e.stopPropagation()}>
+                <td className="px-3 py-2 text-gray-300 max-w-[110px] truncate" title={user.id}>
+                  {user.id.slice(0, 6)}...{user.id.slice(-4)}
+                </td>
+                <td className="px-3 py-2 text-gray-300">{user.name}</td>
+                <td className="px-3 py-2 text-gray-300 max-w-[160px] truncate" title={user.email}>
+                  {user.email.length > 18 ? `${user.email.slice(0, 10)}...${user.email.slice(-8)}` : user.email}
+                </td>
+                <td className="px-3 py-2 text-gray-300">${Number(user.balance).toFixed(2)}</td>
+                <td className="px-3 py-2 text-gray-300">{new Date(user.createdAt).toLocaleDateString()}</td>
+                <td className="px-3 py-2 text-gray-300">
+                  <div className="flex items-center gap-1 w-full" onClick={e => e.stopPropagation()}>
                     {editingUserId === user.id ? (
                       <>
                         <input
                           type="number"
-                          placeholder="Amount"
-                          className="w-24 px-2 py-1 bg-gray-700 text-white rounded border border-gray-600"
+                          placeholder="Amt"
+                          className="w-16 px-1 py-0.5 bg-gray-700 text-white rounded border border-gray-600 text-xs"
                           onChange={(e) => {
                             setAmount(Number(e.target.value));
                             setSelectedUser(user);
@@ -77,28 +81,36 @@ export function UserTable({ users }: Props) {
                         />
                         <button
                           onClick={handleApplyCredit}
-                          className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded text-sm"
+                          className="bg-green-600 hover:bg-green-700 text-white px-2 py-0.5 rounded text-base border border-green-400 shadow-sm font-bold focus:outline-none focus:ring-2 focus:ring-green-400 cursor-pointer"
                           disabled={!amount}
+                          title="Apply"
                         >
-                          Apply
+                          <span className="text-white">✓</span>
                         </button>
                         <button
                           onClick={() => {
                             setEditingUserId(null);
                             setAmount(0);
                           }}
-                          className="text-gray-400 hover:text-gray-300 text-sm"
+                          className="bg-red-600 hover:bg-red-700 text-white px-2 py-0.5 rounded text-base border border-red-400 shadow-sm font-bold focus:outline-none focus:ring-2 focus:ring-red-400 cursor-pointer"
+                          title="Cancel"
                         >
-                          Cancel
+                          <span className="text-white">X</span>
                         </button>
                       </>
                     ) : (
-                      <button
-                        onClick={(e) => handleShowCreditInput(user, e)}
-                        className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded text-sm"
-                      >
-                        Credit/Debit
-                      </button>
+                      <div className="relative group">
+                        <button
+                          onClick={(e) => handleShowCreditInput(user, e)}
+                          className="bg-blue-500 hover:bg-blue-600 text-white px-2 py-0.5 rounded text-xs flex items-center justify-center"
+                          title="Credit/Debit"
+                        >
+                          <span className="material-icons text-sm whitespace-nowrap">apply credit</span>
+                        </button>
+                        <span className="absolute left-1/2 -translate-x-1/2 mt-1 w-max bg-gray-900 text-white text-xs rounded px-2 py-1 opacity-0 group-hover:opacity-100 pointer-events-none z-10">
+                          Credit/Debit
+                        </span>
+                      </div>
                     )}
                   </div>
                 </td>
