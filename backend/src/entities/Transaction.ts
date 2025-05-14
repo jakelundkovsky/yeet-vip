@@ -1,27 +1,24 @@
-// todo
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, ManyToOne, JoinColumn } from "typeorm"
+import { User } from "./user"
 
-// import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, ManyToOne, JoinColumn } from "typeorm"
-// import { User } from "./user"
+@Entity('transactions')
+export class Transaction {
+    @PrimaryGeneratedColumn("uuid")
+    id!: string
 
-// @Entity('transactions')
-// export class Transaction {
-//     @PrimaryGeneratedColumn("uuid")
-//     id!: string
+    @Column({ type: "decimal"})
+    amount!: number
 
-//     // consideration: crypto and decimal
-//     @Column({ type: "decimal", precision: 10, scale: 2 })
-//     amount!: number
+    @ManyToOne(() => User)
+    @JoinColumn({ name: "user_id" })
+    user!: User
 
-//     @ManyToOne(() => User, user => user.transactions)
-//     @JoinColumn({ name: "userId" })
-//     user!: User
+    @Column({ name: "user_id" })
+    userId!: string
 
-//     @Column()
-//     userId!: string
+    @CreateDateColumn({ name: "created_at" })
+    createdAt!: Date
 
-//     @CreateDateColumn()
-//     createdAt!: Date
-
-//     @UpdateDateColumn()
-//     updatedAt!: Date
-// } 
+    @UpdateDateColumn({ name: "updated_at" })
+    updatedAt!: Date
+}

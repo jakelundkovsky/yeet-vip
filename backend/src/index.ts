@@ -1,6 +1,8 @@
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
+import { AppDataSource } from './data-source';
+import { User } from './entities/user';
 
 // load environment variables
 dotenv.config();
@@ -13,49 +15,33 @@ const PORT = process.env.PORT || 3001;
 app.use(cors());
 app.use(express.json());
 
+// Initialize TypeORM
+AppDataSource.initialize()
+  .then(() => {
+    console.log("Data Source has been initialized!");
+  })
+  .catch((err) => {
+    console.error("Error during Data Source initialization:", err);
+  });
+
 // hello world endpoint
 app.get('/api', (req, res) => {
   res.json({ message: 'Hello World from Yeet Casino API!' });
 });
 
 // list users endpoint
-app.get('/api/users', (req, res) => {
-    // todo: pagination
-    // todo: sort (username, balance, createdAt)
+app.get('/api/users', async (req, res) => {
+    try {
+        const userRepository = AppDataSource.getRepository(User);
+        const users = await userRepository.find();
+        res.json({ users });
+    } catch (error) {
+        console.error('Error fetching users:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
 
-    res.json({ users: [
-        {
-            id: 1,
-            name: 'John Doe',
-            email: 'john.doe@example.com',
-            role: 'admin',
-            createdAt: new Date(),
-        },
-        {
-            id: 2,
-            name: 'Jane Doe',
-            email: 'jane.doe@example.com',
-            role: 'user',
-            createdAt: new Date(),
-        },
-        {
-            id: 3,
-            name: 'John Smith',
-            email: 'john.smith@example.com',
-            role: 'user',
-            createdAt: new Date(),
-        },
-        {
-            id: 4,
-            name: 'Jane Smith',
-            email: 'jane.smith@example.com',
-            role: 'user',
-            createdAt: new Date(),
-        },
-    ]});
-  });
-
-  // list users endpoint
+// list users endpoint
 app.get('/api/users/:userId/transactions', (req, res) => {
     // todo: pagination
     // todo: sort (amount, balance, createdAt)
