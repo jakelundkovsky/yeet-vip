@@ -1,14 +1,12 @@
 'use client';
 
 import { User } from "@/app/types";
-import { useRouter } from "next/navigation";
 
 interface Props {
     users: User[];
 }
 
 export function UserTable({ users }: Props) {
-  const router = useRouter();
   return (
     <div className="overflow-x-auto">
     <table className="min-w-full bg-gray-800 border border-gray-700 rounded-lg">

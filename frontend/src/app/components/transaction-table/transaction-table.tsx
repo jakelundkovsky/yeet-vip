@@ -15,7 +15,6 @@ export function TransactionTable({ transactions }: Props) {
             <th className="px-6 py-3 text-left text-gray-200">ID</th>
             <th className="px-6 py-3 text-left text-gray-200">User ID</th>
             <th className="px-6 py-3 text-left text-gray-200">Amount</th>
-            <th className="px-6 py-3 text-left text-gray-200">Type</th>
             <th className="px-6 py-3 text-left text-gray-200">Created At</th>
           </tr>
         </thead>
@@ -25,13 +24,6 @@ export function TransactionTable({ transactions }: Props) {
               <td className="px-6 py-4 text-gray-300">{transaction.id}</td>
               <td className="px-6 py-4 text-gray-300">{transaction.userId}</td>
               <td className="px-6 py-4 text-gray-300">${transaction.amount.toFixed(2)}</td>
-              <td className="px-6 py-4 text-gray-300">
-                <span className={`px-2 py-1 rounded-full text-sm ${
-                  transaction.type === 'credit' ? 'bg-green-900 text-green-300' : 'bg-red-900 text-red-300'
-                }`}>
-                  {transaction.type}
-                </span>
-              </td>
               <td className="px-6 py-4 text-gray-300">{new Date(transaction.createdAt).toLocaleDateString()}</td>
             </tr>
           ))}

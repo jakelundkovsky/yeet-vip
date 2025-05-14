@@ -55,6 +55,39 @@ app.get('/api/users', (req, res) => {
     ]});
   });
 
+  // list users endpoint
+app.get('/api/users/:userId/transactions', (req, res) => {
+    // todo: pagination
+    // todo: sort (amount, balance, createdAt)
+
+    res.json({ transactions: [
+        {
+            id: 1,
+            amount: 100,
+            userId: 1,
+            createdAt: new Date(),
+        },
+        {
+            id: 2,
+            amount: 200,
+            userId: 1,
+            createdAt: new Date(),
+        },
+        {
+            id: 3,
+            amount: 300,
+            userId: 1,
+            createdAt: new Date(),
+        },
+        {
+            id: 4,
+            amount: 400,
+            userId: 1,
+            createdAt: new Date(),
+        },
+    ]});
+  });
+
 app.post('/api/users/:userId/credit', (req, res) => {
     // todo: credit
     // todo: debit
