@@ -5,3 +5,11 @@ export interface User {
     role: string;
     createdAt: string;
 }
+
+export interface Transaction {
+    id: number;
+    userId: number;
+    amount: number;
+    type: 'credit' | 'debit';
+    createdAt: string;
+}

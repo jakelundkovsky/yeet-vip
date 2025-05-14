@@ -1,12 +1,14 @@
 'use client';
 
 import { User } from "@/app/types";
+import { useRouter } from "next/navigation";
 
 interface Props {
     users: User[];
 }
 
 export function UserTable({ users }: Props) {
+  const router = useRouter();
   return (
     <div className="overflow-x-auto">
     <table className="min-w-full bg-gray-800 border border-gray-700 rounded-lg">
@@ -21,7 +23,11 @@ export function UserTable({ users }: Props) {
       </thead>
       <tbody>
         {users.map((user) => (
-          <tr key={user.id} className="border-t border-gray-700 hover:bg-gray-700">
+          <tr
+            key={user.id}
+            className="border-t border-gray-700 hover:bg-gray-700 cursor-pointer"
+            onClick={() => window.open(`/admin/users/${user.id}`, '_blank')}
+          >
             <td className="px-6 py-4 text-gray-300">{user.id}</td>
             <td className="px-6 py-4 text-gray-300">{user.name}</td>
             <td className="px-6 py-4 text-gray-300">{user.email}</td>
