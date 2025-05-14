@@ -1,7 +1,6 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, OneToMany } from "typeorm"
-import { Transaction } from "./Transaction"
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn } from "typeorm"
 
-@Entity()
+@Entity('users')
 export class User {
     @PrimaryGeneratedColumn("uuid")
     id!: string
@@ -20,7 +19,4 @@ export class User {
 
     @UpdateDateColumn()
     updatedAt!: Date
-
-    @OneToMany(() => Transaction, transaction => transaction.user)
-    transactions!: Transaction[]
 } 
