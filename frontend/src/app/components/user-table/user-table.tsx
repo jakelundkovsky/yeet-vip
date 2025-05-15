@@ -71,6 +71,11 @@ export function UserTable({ users: initialUsers, pagination: initialPagination }
       try {
         await updateUserCredit(selectedUser.id, amount);
 
+        // Refetch users to update the table
+        const { users: updatedUsers, pagination: newPagination } = await fetchUsers(sortBy, sortOrder, currentPage);
+        setUsers(updatedUsers);
+        setPagination(newPagination);
+
         setShowConfirm(false);
         setSelectedUser(null);
         setAmount(0);
