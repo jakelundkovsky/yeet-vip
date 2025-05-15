@@ -12,7 +12,8 @@
     "migration:revert": "npm run typeorm migration:revert -- -d src/data-source.ts",
     "migration:show": "npm run typeorm migration:show -- -d src/data-source.ts",
     "migration:create": "npm run typeorm migration:create -- src/migrations",
-    "seed:db": "ts-node src/scripts/seed-db.ts"
+    "db:seed": "ts-node src/scripts/seed-db.ts",
+    "db:reset": "ts-node src/scripts/reset-db.ts"
   },
   "keywords": [],
   "author": "",
