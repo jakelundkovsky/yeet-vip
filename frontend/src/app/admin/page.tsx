@@ -1,7 +1,8 @@
-import { UserTable } from "@/app/components/user-table";
-import { getUsers } from "@/app/utils";
-import Logo from "@/app/static/logo.jpg";
 import Image from "next/image";
+
+import { UserTable } from "@/app/components/user-table";
+import Logo from "@/app/static/logo.jpg";
+import { getUsers } from "@/app/utils";
 
 export default async function AdminPage() {
   const { users, pagination } = await getUsers();

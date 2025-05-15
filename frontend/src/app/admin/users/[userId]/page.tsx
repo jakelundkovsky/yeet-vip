@@ -1,8 +1,10 @@
-import { TransactionTable } from "@/app/admin/users/[userId]/components/transaction-table";
-import { getUser, getUserTransactions, getUsers } from "@/app/utils";
-import { notFound } from "next/navigation";
-import Logo from "@/app/static/logo.jpg";
 import Image from "next/image";
+import { notFound } from "next/navigation";
+
+import { TransactionTable } from "@/app/admin/users/[userId]/components/transaction-table";
+import Logo from "@/app/static/logo.jpg";
+import { getUser, getUserTransactions } from "@/app/utils";
+
 
 type Props = {
   params: Promise<{ userId: string }>;

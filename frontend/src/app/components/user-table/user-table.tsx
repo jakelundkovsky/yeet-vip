@@ -1,10 +1,11 @@
 'use client';
 
+import { useState, useEffect } from "react";
+import { toast } from 'react-hot-toast';
+
+import { fetchUsers } from "@/app/actions";
 import { User } from "@/app/types";
 import { updateUserCredit } from "@/app/utils";
-import { fetchUsers } from "@/app/actions";
-import { useState, useEffect } from "react";
-import toast from 'react-hot-toast';
 
 interface Props {
     users: User[];
