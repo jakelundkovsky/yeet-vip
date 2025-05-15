@@ -11,7 +11,7 @@ export default async function UserDetailPage({ params }: Props) {
   if (!userId) return notFound();
 
   // optionally fetch user for display (not just transactions)
-  const users = await getUsers();
+  const { users } = await getUsers();
   const user = users.find((u) => u.id === userId);
   if (!user) return notFound();
 

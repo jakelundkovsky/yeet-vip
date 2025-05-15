@@ -1,30 +1,45 @@
 'use client';
 
 import { User } from "@/app/types";
-import { updateUserCredit, getUsers } from "@/app/utils";
+import { updateUserCredit } from "@/app/utils";
+import { fetchUsers } from "@/app/actions";
 import { useState, useEffect } from "react";
 import toast from 'react-hot-toast';
 
 interface Props {
     users: User[];
+    pagination: {
+        currentPage: number;
+        totalPages: number;
+        totalItems: number;
+        itemsPerPage: number;
+    };
 }
 
-export function UserTable({ users: initialUsers }: Props) {
+export function UserTable({ users: initialUsers, pagination: initialPagination }: Props) {
   const [showConfirm, setShowConfirm] = useState(false);
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [amount, setAmount] = useState<number>(0);
   const [editingUserId, setEditingUserId] = useState<string | null>(null);
   const [users, setUsers] = useState<User[]>(initialUsers);
+  const [pagination, setPagination] = useState(initialPagination);
   const [sortBy, setSortBy] = useState<string>('createdAt');
   const [sortOrder, setSortOrder] = useState<'ASC' | 'DESC'>('DESC');
+  const [currentPage, setCurrentPage] = useState(pagination.currentPage);
+  const usersPerPage = pagination.itemsPerPage;
 
   useEffect(() => {
     const fetchSortedUsers = async () => {
-      const sortedUsers = await getUsers(sortBy, sortOrder);
+      const { users: sortedUsers, pagination: newPagination } = await fetchUsers(sortBy, sortOrder, currentPage);
+      console.log('Fetched users:', sortedUsers);
+      console.log('New pagination:', newPagination);
       setUsers(sortedUsers);
+      setPagination(newPagination);
     };
     fetchSortedUsers();
-  }, [sortBy, sortOrder]);
+  }, [sortBy, sortOrder, currentPage]);
+
+  const currentUsers = users;
 
   const handleSort = (field: string) => {
     if (sortBy === field) {
@@ -69,6 +84,13 @@ export function UserTable({ users: initialUsers }: Props) {
     }
   };
 
+  const handlePageChange = async (page: number) => {
+    const { users: newUsers, pagination: newPagination } = await fetchUsers(sortBy, sortOrder, page);
+    setCurrentPage(page);
+    setUsers(newUsers);
+    setPagination(newPagination);
+  };
+
   return (
     <>
       <div className="overflow-x-auto h-full flex flex-col">
@@ -104,7 +126,7 @@ export function UserTable({ users: initialUsers }: Props) {
             </tr>
           </thead>
           <tbody>
-            {users.map((user) => (
+            {currentUsers.map((user) => (
               <tr
                 key={user.id}
                 className="border-t border-gray-700 hover:bg-gray-700 cursor-pointer text-xs"
@@ -169,6 +191,25 @@ export function UserTable({ users: initialUsers }: Props) {
             ))}
           </tbody>
         </table>
+        <div className="flex justify-center items-center gap-2 mt-4 mb-2">
+          <button
+            onClick={() => handlePageChange(currentPage - 1)}
+            disabled={currentPage === 1}
+            className="cursor-pointer px-3 py-1 bg-gray-700 text-white rounded hover:bg-gray-600 disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            Previous
+          </button>
+          <span className="text-gray-300">
+            Page {currentPage} of {pagination.totalPages}
+          </span>
+          <button
+            onClick={() => handlePageChange(currentPage + 1)}
+            disabled={currentPage === pagination.totalPages}
+            className="cursor-pointer px-3 py-1 bg-gray-700 text-white rounded hover:bg-gray-600 disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            Next
+          </button>
+        </div>
       </div>
 
       {showConfirm && (

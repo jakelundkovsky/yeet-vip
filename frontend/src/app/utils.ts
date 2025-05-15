@@ -2,14 +2,27 @@ import { User, Transaction } from "./types";
 
 const BASE_API_URL = 'http://localhost:3001/api';
 
-export async function getUsers(sortBy?: string, sortOrder?: 'ASC' | 'DESC'): Promise<User[]> {
+export async function getUsers(sortBy?: string, sortOrder?: 'ASC' | 'DESC', page?: number): Promise<{ users: User[]; pagination: {
+    currentPage: number;
+    totalPages: number;
+    totalItems: number;
+    itemsPerPage: number;
+} }> {
     const params = new URLSearchParams();
     if (sortBy) params.append('sortBy', sortBy);
     if (sortOrder) params.append('sortOrder', sortOrder);
+    if (page) params.append('page', page.toString());
+
+    console.log(`${BASE_API_URL}/users?${params.toString()}`);
     
-    const res = await fetch(`${BASE_API_URL}/users?${params.toString()}`, { cache: 'no-store' });
+    const res = await fetch(`${BASE_API_URL}/users?${params.toString()}`, { 
+        cache: 'no-store',
+        credentials: 'include'
+    });
     const data = await res.json();
-    return data.users;
+
+    console.log(data);
+    return data;
 }
 
 export async function getUserTransactions(userId: string): Promise<Transaction[]> {
