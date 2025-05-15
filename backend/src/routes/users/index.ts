@@ -1,8 +1,9 @@
 import { Router } from 'express';
-import getUsers from './get-users';
+
+import creditUser from './credit-user';
 import getUser from './get-user';
 import getUserTransactions from './get-user-transactions';
-import creditUser from './credit-user';
+import getUsers from './get-users';
 
 const userRouter = Router();
 

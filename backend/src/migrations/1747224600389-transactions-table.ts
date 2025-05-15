@@ -16,7 +16,8 @@ export class TransactionsTable1747224600389 implements MigrationInterface {
         `);
     }
 
-    public async down(queryRunner: QueryRunner): Promise<void> {
+    public async down(): Promise<void> {
+        // no-op
     }
 
 }

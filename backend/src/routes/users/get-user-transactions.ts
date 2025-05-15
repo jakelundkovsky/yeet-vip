@@ -1,4 +1,5 @@
-import { Router, Request, Response } from 'express';
+import { Router } from 'express';
+
 import { AppDataSource } from '../../data-source';
 import { Transaction } from '../../entities/transaction';
 

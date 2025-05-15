@@ -1,7 +1,8 @@
 import { Router, Request, Response } from 'express';
+
 import { AppDataSource } from '../../data-source';
-import { User } from '../../entities/user';
 import { Transaction } from '../../entities/transaction';
+import { User } from '../../entities/user';
 
 const router = Router();
 

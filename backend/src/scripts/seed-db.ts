@@ -1,7 +1,8 @@
-import { User } from "../entities/user"
-import { Transaction } from "../entities/transaction"
 import { faker } from "@faker-js/faker"
+
 import { AppDataSource } from "../data-source";
+import { Transaction } from "../entities/transaction"
+import { User } from "../entities/user"
 
 async function seed() {
     try {

@@ -1,6 +1,7 @@
-import express, { Request, Response } from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
+import express from 'express';
+
 import { AppDataSource } from './data-source';
 import usersRouter from './routes/users';
 
