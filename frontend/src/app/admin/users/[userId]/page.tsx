@@ -1,4 +1,4 @@
-import { TransactionTable } from "@/app/components/transaction-table";
+import { TransactionTable } from "@/app/admin/users/[userId]/components/transaction-table";
 import { getUserTransactions, getUsers } from "@/app/utils";
 import { notFound } from "next/navigation";
 
@@ -18,11 +18,11 @@ export default async function UserDetailPage({ params }: Props) {
   const transactions = await getUserTransactions(userId);
 
   return (
-    <div className="p-8">
-      <h1 className="text-2xl font-bold mb-4 text-white">
+    <div className="p-8 bg-gray-900 min-h-screen">
+      <h1 className="text-xl font-bold mb-1 text-white">
         {user.name} ({user.email}) - Balance: ${user.balance}
       </h1>
-      <h3 className="text-xl font-bold mb-4 text-white">
+      <h3 className="text-lg font-bold mb-4 text-white">
         User ID: {user.id}
       </h3>
       <h2 className="text-lg font-semibold mb-2 text-gray-300">Transactions</h2>
