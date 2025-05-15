@@ -130,7 +130,7 @@ export function UserTable({ users: initialUsers, pagination: initialPagination }
               onClick={() => window.open(`/admin/users/${user.id}`, '_blank')}
             >
               <div className="px-3 py-2 text-gray-300 truncate" title={user.id}>
-                {user.id.slice(0, 6)}...{user.id.slice(-4)}
+                {user.id}
               </div>
               <div className="px-3 py-2 text-gray-300 truncate" title={user.name}>
                 {user.name}

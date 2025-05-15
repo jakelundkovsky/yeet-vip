@@ -9,24 +9,29 @@ interface Props {
 export function TransactionTable({ transactions }: Props) {
   return (
     <div className="overflow-x-auto h-full flex flex-col">
-      <table className="min-w-full bg-gray-800 border border-gray-700 rounded-lg flex-1">
-        <thead>
-          <tr className="bg-gray-700 text-xs">
-            <th className="px-3 py-2 text-left text-gray-200">ID</th>
-            <th className="px-3 py-2 text-left text-gray-200">Amount</th>
-            <th className="px-3 py-2 text-left text-gray-200">Created At</th>
-          </tr>
-        </thead>
-        <tbody>
-          {transactions.map((transaction) => (
-            <tr key={transaction.id} className="border-t border-gray-700 hover:bg-gray-700 text-xs">
-              <td className="px-3 py-2 text-gray-300">{transaction.id}</td>
-              <td className="px-3 py-2 text-gray-300">${Number(transaction.amount).toFixed(2)}</td>
-              <td className="px-3 py-2 text-gray-300">{new Date(transaction.createdAt).toLocaleDateString()}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      <div className="min-w-full w-full bg-gray-800 border border-gray-700 rounded-lg flex-1">
+        <div className="grid grid-cols-[1fr_1fr_1fr] w-full">
+          <div className="px-3 py-2 text-left text-gray-200 bg-gray-700 text-xs">ID</div>
+          <div className="px-3 py-2 text-left text-gray-200 bg-gray-700 text-xs">Amount</div>
+          <div className="px-3 py-2 text-left text-gray-200 bg-gray-700 text-xs">Transaction Date</div>
+        </div>
+        {transactions.map((transaction) => (
+          <div
+            key={transaction.id}
+            className="grid grid-cols-[1fr_1fr_1fr] border-t border-gray-700 hover:bg-gray-700 text-xs"
+          >
+            <div className="px-3 py-2 text-gray-300 truncate" title={transaction.id}>
+              {transaction.id}
+            </div>
+            <div className="px-3 py-2 text-gray-300">
+              ${Number(transaction.amount).toFixed(2)}
+            </div>
+            <div className="px-3 py-2 text-gray-300">
+              {new Date(transaction.createdAt).toLocaleDateString()}
+            </div>
+          </div>
+        ))}
+      </div>
     </div>
   );
 } 
