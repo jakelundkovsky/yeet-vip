@@ -3,6 +3,7 @@
 import { User } from "@/app/types";
 import { updateUserCredit, getUsers } from "@/app/utils";
 import { useState, useEffect } from "react";
+import toast from 'react-hot-toast';
 
 interface Props {
     users: User[];
@@ -52,11 +53,19 @@ export function UserTable({ users: initialUsers }: Props) {
 
   const handleConfirm = async () => {
     if (selectedUser) {
-      await updateUserCredit(selectedUser.id, amount);
-      setShowConfirm(false);
-      setSelectedUser(null);
-      setAmount(0);
-      setEditingUserId(null);
+      try {
+        await updateUserCredit(selectedUser.id, amount);
+
+        setShowConfirm(false);
+        setSelectedUser(null);
+        setAmount(0);
+        setEditingUserId(null);
+        
+        toast.success(`Success! ${selectedUser.name}'s balance updated by $${amount}`);
+
+      } catch (error) {
+        toast.error('Failed to update user balance. Please try again.');
+      }
     }
   };
 
@@ -147,14 +156,11 @@ export function UserTable({ users: initialUsers }: Props) {
                       <div className="relative group">
                         <button
                           onClick={(e) => handleShowCreditInput(user, e)}
-                          className="bg-blue-500 hover:bg-blue-600 text-white px-2 py-0.5 rounded text-xs flex items-center justify-center"
+                          className="cursor-pointer bg-blue-500 hover:bg-blue-600 text-white px-2 py-0.5 rounded text-xs flex items-center justify-center"
                           title="Credit/Debit"
                         >
                           <span className="material-icons text-sm whitespace-nowrap">credit</span>
                         </button>
-                        <span className="absolute left-1/2 -translate-x-1/2 mt-1 w-max bg-gray-900 text-white text-xs rounded px-2 py-1 opacity-0 group-hover:opacity-100 pointer-events-none z-10">
-                          Credit/Debit
-                        </span>
                       </div>
                     )}
                   </div>
@@ -174,13 +180,13 @@ export function UserTable({ users: initialUsers }: Props) {
             <div className="flex justify-end gap-2">
               <button
                 onClick={() => setShowConfirm(false)}
-                className="px-3 py-1 bg-gray-600 text-white rounded hover:bg-gray-700 text-sm"
+                className="cursor-pointer px-3 py-1 bg-gray-600 text-white rounded hover:bg-gray-700 text-sm"
               >
                 Cancel
               </button>
               <button
                 onClick={handleConfirm}
-                className="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 text-sm"
+                className="cursor-pointer px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 text-sm"
               >
                 Confirm
               </button>
