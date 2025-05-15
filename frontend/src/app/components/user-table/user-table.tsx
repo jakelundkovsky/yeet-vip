@@ -26,7 +26,6 @@ export function UserTable({ users: initialUsers, pagination: initialPagination }
   const [sortBy, setSortBy] = useState<string>('createdAt');
   const [sortOrder, setSortOrder] = useState<'ASC' | 'DESC'>('DESC');
   const [currentPage, setCurrentPage] = useState(pagination.currentPage);
-  const usersPerPage = pagination.itemsPerPage;
 
   useEffect(() => {
     const fetchSortedUsers = async () => {
@@ -95,6 +94,26 @@ export function UserTable({ users: initialUsers, pagination: initialPagination }
     setUsers(newUsers);
     setPagination(newPagination);
   };
+
+  if (!currentUsers?.length) {
+    return (
+      <div className="overflow-x-auto h-full flex flex-col rounded-lg">
+        <div className="min-w-full w-full bg-gray-800 border border-gray-700 flex-1 rounded-lg">
+          <div className="grid grid-cols-[1fr_1.5fr_1fr_1fr_1fr_1.5fr] w-full">
+            <div className="px-3 py-2 text-left text-gray-200 bg-gray-700 text-xs flex items-center h-10">ID</div>
+            <div className="px-3 py-2 text-left text-gray-200 bg-gray-700 text-xs flex items-center h-10">Name</div>
+            <div className="px-3 py-2 text-left text-gray-200 bg-gray-700 text-xs flex items-center h-10">Email</div>
+            <div className="px-3 py-2 text-left text-gray-200 bg-gray-700 text-xs flex items-center h-10">Balance</div>
+            <div className="px-3 py-2 text-left text-gray-200 bg-gray-700 text-xs flex items-center h-10">Member Since</div>
+            <div className="px-3 py-2 text-left text-gray-200 bg-gray-700 text-xs flex items-center h-10">Actions</div>
+          </div>
+          <div className="grid grid-cols-1 place-items-center h-32">
+            <span className="text-gray-400 text-sm">No users yet</span>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <>
