@@ -2,6 +2,12 @@ import { User, Transaction } from "./types";
 
 const BASE_API_URL = 'http://localhost:3001/api';
 
+export async function getUser(userId: string): Promise<User> {
+    const res = await fetch(`${BASE_API_URL}/users/${userId}`, { cache: 'no-store' });
+    const data = await res.json();
+    return data.user;
+}
+
 export async function getUsers(sortBy?: string, sortOrder?: 'ASC' | 'DESC', page?: number): Promise<{ users: User[]; pagination: {
     currentPage: number;
     totalPages: number;

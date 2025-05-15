@@ -30,6 +30,18 @@ app.get('/api', (req, res) => {
   res.json({ message: 'Hello World from Yeet Casino API!' });
 });
 
+app.get('/api/users/:userId', async (req, res) => {
+    try {
+        const { userId } = req.params;
+        const userRepository = AppDataSource.getRepository(User);
+        const user = await userRepository.findOne({ where: { id: userId } });
+        res.json({ user });
+    } catch (error) {
+        console.error('Error fetching user:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
+
 // list users endpoint
 app.get('/api/users', async (req, res) => {
     try {

@@ -94,103 +94,105 @@ export function UserTable({ users: initialUsers, pagination: initialPagination }
   return (
     <>
       <div className="overflow-x-auto h-full flex flex-col">
-        <table className="min-w-full bg-gray-800 border border-gray-700 rounded-lg flex-1">
-          <thead>
-            <tr className="bg-gray-700 text-xs">
-              <th className="px-3 py-2 text-left text-gray-200 w-[110px]">ID</th>
-              <th 
-                className="px-3 py-2 text-left text-gray-200 cursor-pointer hover:bg-gray-600"
-                onClick={() => handleSort('name')}
-              >
-                Name <SortIcon field="name" />
-              </th>
-              <th 
-                className="px-3 py-2 text-left text-gray-200 w-[160px] cursor-pointer hover:bg-gray-600"
-                onClick={() => handleSort('email')}
-              >
-                Email <SortIcon field="email" />
-              </th>
-              <th 
-                className="px-3 py-2 text-left text-gray-200 cursor-pointer hover:bg-gray-600"
-                onClick={() => handleSort('balance')}
-              >
-                Balance <SortIcon field="balance" />
-              </th>
-              <th 
-                className="px-3 py-2 text-left text-gray-200 cursor-pointer hover:bg-gray-600"
-                onClick={() => handleSort('createdAt')}
-              >
-                Created At <SortIcon field="createdAt" />
-              </th>
-              <th className="px-3 py-2 text-left text-gray-200 w-[80px]">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {currentUsers.map((user) => (
-              <tr
-                key={user.id}
-                className="border-t border-gray-700 hover:bg-gray-700 cursor-pointer text-xs"
-                onClick={() => window.open(`/admin/users/${user.id}`, '_blank')}
-              >
-                <td className="px-3 py-2 text-gray-300 max-w-[110px] truncate" title={user.id}>
-                  {user.id.slice(0, 6)}...{user.id.slice(-4)}
-                </td>
-                <td className="px-3 py-2 text-gray-300">{user.name}</td>
-                <td className="px-3 py-2 text-gray-300 max-w-[160px] truncate" title={user.email}>
-                  {user.email.length > 18 ? `${user.email.slice(0, 10)}...${user.email.slice(-8)}` : user.email}
-                </td>
-                <td className="px-3 py-2 text-gray-300">${Number(user.balance).toFixed(2)}</td>
-                <td className="px-3 py-2 text-gray-300">{new Date(user.createdAt).toLocaleDateString()}</td>
-                <td className="px-3 py-2 text-gray-300">
-                  <div className="flex items-center gap-1 w-full" onClick={e => e.stopPropagation()}>
-                    {editingUserId === user.id ? (
-                      <>
-                        <input
-                          type="number"
-                          placeholder="Amt"
-                          className="w-16 px-1 py-0.5 bg-gray-700 text-white rounded border border-gray-600 text-xs"
-                          onChange={(e) => {
-                            setAmount(Number(e.target.value));
-                            setSelectedUser(user);
-                          }}
-                          autoFocus
-                        />
-                        <button
-                          onClick={handleApplyCredit}
-                          className="bg-green-600 hover:bg-green-700 text-white px-2 py-0.5 rounded text-base border border-green-400 shadow-sm font-bold focus:outline-none focus:ring-2 focus:ring-green-400 cursor-pointer"
-                          disabled={!amount}
-                          title="Apply"
-                        >
-                          <span className="text-white">✓</span>
-                        </button>
-                        <button
-                          onClick={() => {
-                            setEditingUserId(null);
-                            setAmount(0);
-                          }}
-                          className="bg-red-600 hover:bg-red-700 text-white px-2 py-0.5 rounded text-base border border-red-400 shadow-sm font-bold focus:outline-none focus:ring-2 focus:ring-red-400 cursor-pointer"
-                          title="Cancel"
-                        >
-                          <span className="text-white">X</span>
-                        </button>
-                      </>
-                    ) : (
-                      <div className="relative group">
-                        <button
-                          onClick={(e) => handleShowCreditInput(user, e)}
-                          className="cursor-pointer bg-blue-500 hover:bg-blue-600 text-white px-2 py-0.5 rounded text-xs flex items-center justify-center"
-                          title="Credit/Debit"
-                        >
-                          <span className="material-icons text-sm whitespace-nowrap">credit</span>
-                        </button>
-                      </div>
-                    )}
-                  </div>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        <div className="min-w-full w-full bg-gray-800 border border-gray-700 rounded-lg flex-1">
+          <div className="grid grid-cols-[1fr_1.5fr_1fr_1fr_1fr_1.5fr] w-full">
+            <div className="px-3 py-2 text-left text-gray-200 bg-gray-700 text-xs">ID</div>
+            <div 
+              className="px-3 py-2 text-left text-gray-200 bg-gray-700 text-xs cursor-pointer hover:bg-gray-600"
+              onClick={() => handleSort('name')}
+            >
+              Name <SortIcon field="name" />
+            </div>
+            <div 
+              className="px-3 py-2 text-left text-gray-200 bg-gray-700 text-xs cursor-pointer hover:bg-gray-600"
+              onClick={() => handleSort('email')}
+            >
+              Email <SortIcon field="email" />
+            </div>
+            <div 
+              className="px-3 py-2 text-left text-gray-200 bg-gray-700 text-xs cursor-pointer hover:bg-gray-600"
+              onClick={() => handleSort('balance')}
+            >
+              Balance <SortIcon field="balance" />
+            </div>
+            <div 
+              className="px-3 py-2 text-left text-gray-200 bg-gray-700 text-xs cursor-pointer hover:bg-gray-600"
+              onClick={() => handleSort('createdAt')}
+            >
+              Created At <SortIcon field="createdAt" />
+            </div>
+            <div className="px-3 py-2 text-left text-gray-200 bg-gray-700 text-xs">Actions</div>
+          </div>
+          {currentUsers.map((user) => (
+            <div
+              key={user.id}
+              className="grid grid-cols-[1fr_1.5fr_1fr_1fr_1fr_1.5fr] border-t border-gray-700 hover:bg-gray-700 cursor-pointer text-xs"
+              onClick={() => window.open(`/admin/users/${user.id}`, '_blank')}
+            >
+              <div className="px-3 py-2 text-gray-300 truncate" title={user.id}>
+                {user.id.slice(0, 6)}...{user.id.slice(-4)}
+              </div>
+              <div className="px-3 py-2 text-gray-300 truncate" title={user.name}>
+                {user.name}
+              </div>
+              <div className="px-3 py-2 text-gray-300 truncate" title={user.email}>
+                {user.email}
+              </div>
+              <div className="px-3 py-2 text-gray-300">
+                ${Number(user.balance).toFixed(2)}
+              </div>
+              <div className="px-3 py-2 text-gray-300">
+                {new Date(user.createdAt).toLocaleDateString()}
+              </div>
+              <div className="px-3 py-2 text-gray-300" onClick={e => e.stopPropagation()}>
+                <div className="flex items-center gap-1 w-full">
+                  {editingUserId === user.id ? (
+                    <>
+                      <input
+                        type="number"
+                        placeholder="Amt"
+                        className="w-16 px-1 py-0.5 bg-gray-700 text-white rounded border border-gray-600 text-xs"
+                        onChange={(e) => {
+                          setAmount(Number(e.target.value));
+                          setSelectedUser(user);
+                        }}
+                        autoFocus
+                      />
+                      <button
+                        onClick={handleApplyCredit}
+                        className="bg-green-600 hover:bg-green-700 text-white px-2 py-0.5 rounded text-base border border-green-400 shadow-sm font-bold focus:outline-none focus:ring-2 focus:ring-green-400 cursor-pointer"
+                        disabled={!amount}
+                        title="Apply"
+                      >
+                        <span className="text-white">✓</span>
+                      </button>
+                      <button
+                        onClick={() => {
+                          setEditingUserId(null);
+                          setAmount(0);
+                        }}
+                        className="bg-red-600 hover:bg-red-700 text-white px-2 py-0.5 rounded text-base border border-red-400 shadow-sm font-bold focus:outline-none focus:ring-2 focus:ring-red-400 cursor-pointer"
+                        title="Cancel"
+                      >
+                        <span className="text-white">X</span>
+                      </button>
+                    </>
+                  ) : (
+                    <div className="relative group">
+                      <button
+                        onClick={(e) => handleShowCreditInput(user, e)}
+                        className="cursor-pointer bg-blue-500 hover:bg-blue-600 text-white px-2 py-0.5 rounded text-xs flex items-center justify-center"
+                        title="Credit/Debit"
+                      >
+                        <span className="material-icons text-sm whitespace-nowrap">credit</span>
+                      </button>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
         <div className="flex justify-center items-center gap-2 mt-4 mb-2">
           <button
             onClick={() => handlePageChange(currentPage - 1)}

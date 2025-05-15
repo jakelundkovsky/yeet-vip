@@ -1,5 +1,5 @@
 import { TransactionTable } from "@/app/admin/users/[userId]/components/transaction-table";
-import { getUserTransactions, getUsers } from "@/app/utils";
+import { getUser, getUserTransactions, getUsers } from "@/app/utils";
 import { notFound } from "next/navigation";
 
 type Props = {
@@ -10,9 +10,7 @@ export default async function UserDetailPage({ params }: Props) {
   const { userId } = await params;
   if (!userId) return notFound();
 
-  // optionally fetch user for display (not just transactions)
-  const { users } = await getUsers();
-  const user = users.find((u) => u.id === userId);
+  const user = await getUser(userId);
   if (!user) return notFound();
 
   const transactions = await getUserTransactions(userId);
