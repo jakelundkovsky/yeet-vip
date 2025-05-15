@@ -16,6 +16,8 @@ async function seed() {
                 user.name = faker.person.fullName()
                 user.email = faker.internet.email()
                 user.balance = 0
+                // Random date within last year
+                user.createdAt = faker.date.past({ years: 1 })
                 return await AppDataSource.manager.save(user)
             })
         )
@@ -27,12 +29,17 @@ async function seed() {
             const numTransactions = faker.number.int({ min: 0, max: 50 })
             let totalBalance = 0
             
-            // First transaction is always a deposit
+            // First transaction is always a deposit, shortly after user creation
             const initialDeposit = faker.number.float({ min: 20, max: 1000, fractionDigits: 2 })
             const deposit = new Transaction()
             deposit.amount = initialDeposit
             deposit.user = user
             deposit.userId = user.id
+            // Create first transaction within 1 hour of user creation
+            deposit.createdAt = faker.date.between({
+                from: user.createdAt,
+                to: new Date(user.createdAt.getTime() + 60 * 60 * 1000)
+            })
             await AppDataSource.manager.save(deposit)
             totalBalance += initialDeposit
 
@@ -54,6 +61,11 @@ async function seed() {
                         transaction.amount = -debitAmount
                         transaction.user = user
                         transaction.userId = user.id
+                        // Create transaction between user creation and now
+                        transaction.createdAt = faker.date.between({
+                            from: user.createdAt,
+                            to: new Date()
+                        })
                         await AppDataSource.manager.save(transaction)
                         totalBalance += transaction.amount
                     }
@@ -63,6 +75,11 @@ async function seed() {
                     transaction.amount = depositAmount
                     transaction.user = user
                     transaction.userId = user.id
+                    // Create transaction between user creation and now
+                    transaction.createdAt = faker.date.between({
+                        from: user.createdAt,
+                        to: new Date()
+                    })
                     await AppDataSource.manager.save(transaction)
                     totalBalance += depositAmount
                 }
