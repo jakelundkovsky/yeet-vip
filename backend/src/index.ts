@@ -24,12 +24,7 @@ AppDataSource.initialize()
     console.error("Error during Data Source initialization:", err);
   });
 
-// hello world endpoint
-app.get('/api', (req, res) => {
-  res.json({ message: 'Hello World from Yeet Casino API!' });
-});
-
-// Mount user routes
+// mount user routes
 app.use('/api/users', usersRouter);
 
 // start the server
