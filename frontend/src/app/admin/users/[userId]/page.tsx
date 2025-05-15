@@ -1,6 +1,8 @@
 import { TransactionTable } from "@/app/admin/users/[userId]/components/transaction-table";
 import { getUser, getUserTransactions, getUsers } from "@/app/utils";
 import { notFound } from "next/navigation";
+import Logo from "@/app/static/logo.jpg";
+import Image from "next/image";
 
 type Props = {
   params: Promise<{ userId: string }>;
@@ -17,12 +19,17 @@ export default async function UserDetailPage({ params }: Props) {
 
   return (
     <div className="p-8 bg-gray-900 min-h-screen">
-      <h1 className="text-xl font-bold mb-1 text-white">
-        {user.name} ({user.email}) - Balance: ${user.balance}
-      </h1>
-      <h3 className="text-lg font-bold mb-4 text-white">
-        User ID: {user.id}
-      </h3>
+      <div className="flex items-center gap-4 mb-6">
+        <Image src={Logo} alt="Logo" width={40} height={40} className="rounded-md" />
+        <div className="flex flex-col">
+          <h1 className="text-xl font-bold mb-1 text-white">
+            {user.name} ({user.email}) - Balance: ${user.balance}
+          </h1>
+          <h3 className="text-lg font-bold text-white">
+          User ID: {user.id}
+        </h3>
+        </div>
+      </div>
       <h2 className="text-lg font-semibold mb-2 text-gray-300">Transactions</h2>
       <TransactionTable transactions={transactions} />
     </div>
