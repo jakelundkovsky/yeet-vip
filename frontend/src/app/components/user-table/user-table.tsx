@@ -96,62 +96,62 @@ export function UserTable({ users: initialUsers, pagination: initialPagination }
       <div className="overflow-x-auto h-full flex flex-col">
         <div className="min-w-full w-full bg-gray-800 border border-gray-700 rounded-lg flex-1">
           <div className="grid grid-cols-[1fr_1.5fr_1fr_1fr_1fr_1.5fr] w-full">
-            <div className="px-3 py-2 text-left text-gray-200 bg-gray-700 text-xs">ID</div>
+            <div className="px-3 py-2 text-left text-gray-200 bg-gray-700 text-xs flex items-center h-10">ID</div>
             <div 
-              className="px-3 py-2 text-left text-gray-200 bg-gray-700 text-xs cursor-pointer hover:bg-gray-600"
+              className="px-3 py-2 text-left text-gray-200 bg-gray-700 text-xs cursor-pointer hover:bg-gray-600 flex items-center h-10"
               onClick={() => handleSort('name')}
             >
               Name <SortIcon field="name" />
             </div>
             <div 
-              className="px-3 py-2 text-left text-gray-200 bg-gray-700 text-xs cursor-pointer hover:bg-gray-600"
+              className="px-3 py-2 text-left text-gray-200 bg-gray-700 text-xs cursor-pointer hover:bg-gray-600 flex items-center h-10"
               onClick={() => handleSort('email')}
             >
               Email <SortIcon field="email" />
             </div>
             <div 
-              className="px-3 py-2 text-left text-gray-200 bg-gray-700 text-xs cursor-pointer hover:bg-gray-600"
+              className="px-3 py-2 text-left text-gray-200 bg-gray-700 text-xs cursor-pointer hover:bg-gray-600 flex items-center h-10"
               onClick={() => handleSort('balance')}
             >
               Balance <SortIcon field="balance" />
             </div>
             <div 
-              className="px-3 py-2 text-left text-gray-200 bg-gray-700 text-xs cursor-pointer hover:bg-gray-600"
+              className="px-3 py-2 text-left text-gray-200 bg-gray-700 text-xs cursor-pointer hover:bg-gray-600 flex items-center h-10"
               onClick={() => handleSort('createdAt')}
             >
-              Created At <SortIcon field="createdAt" />
+              Member Since <SortIcon field="createdAt" />
             </div>
-            <div className="px-3 py-2 text-left text-gray-200 bg-gray-700 text-xs">Actions</div>
+            <div className="px-3 py-2 text-left text-gray-200 bg-gray-700 text-xs flex items-center h-10">Actions</div>
           </div>
           {currentUsers.map((user) => (
             <div
               key={user.id}
-              className="grid grid-cols-[1fr_1.5fr_1fr_1fr_1fr_1.5fr] border-t border-gray-700 hover:bg-gray-700 cursor-pointer text-xs"
+              className="grid grid-cols-[1fr_1.5fr_1fr_1fr_1fr_1.5fr] border-t border-gray-700 hover:bg-gray-700 cursor-pointer text-xs h-10"
               onClick={() => window.open(`/admin/users/${user.id}`, '_blank')}
             >
-              <div className="px-3 py-2 text-gray-300 truncate" title={user.id}>
+              <div className="px-3 py-2 text-gray-300 truncate flex items-center" title={user.id}>
                 {user.id}
               </div>
-              <div className="px-3 py-2 text-gray-300 truncate" title={user.name}>
+              <div className="px-3 py-2 text-gray-300 truncate flex items-center" title={user.name}>
                 {user.name}
               </div>
-              <div className="px-3 py-2 text-gray-300 truncate" title={user.email}>
+              <div className="px-3 py-2 text-gray-300 truncate flex items-center" title={user.email}>
                 {user.email}
               </div>
-              <div className="px-3 py-2 text-gray-300">
+              <div className="px-3 py-2 text-gray-300 flex items-center">
                 ${Number(user.balance).toFixed(2)}
               </div>
-              <div className="px-3 py-2 text-gray-300">
+              <div className="px-3 py-2 text-gray-300 flex items-center">
                 {new Date(user.createdAt).toLocaleDateString()}
               </div>
-              <div className="px-3 py-2 text-gray-300" onClick={e => e.stopPropagation()}>
-                <div className="flex items-center gap-1 w-full">
+              <div className="px-3 py-2 text-gray-300 flex items-center" onClick={e => e.stopPropagation()}>
+                <div className="flex items-center gap-1 w-full h-6">
                   {editingUserId === user.id ? (
                     <>
                       <input
                         type="number"
                         placeholder="Amt"
-                        className="w-16 px-1 py-0.5 bg-gray-700 text-white rounded border border-gray-600 text-xs"
+                        className="w-16 px-1 py-0.5 bg-gray-700 text-white rounded border border-gray-600 text-xs h-6"
                         onChange={(e) => {
                           setAmount(Number(e.target.value));
                           setSelectedUser(user);
@@ -160,7 +160,7 @@ export function UserTable({ users: initialUsers, pagination: initialPagination }
                       />
                       <button
                         onClick={handleApplyCredit}
-                        className="bg-green-600 hover:bg-green-700 text-white px-2 py-0.5 rounded text-base border border-green-400 shadow-sm font-bold focus:outline-none focus:ring-2 focus:ring-green-400 cursor-pointer"
+                        className="bg-green-600 hover:bg-green-700 text-white px-1.5 py-0.5 rounded text-sm border border-green-400 shadow-sm font-bold focus:outline-none focus:ring-2 focus:ring-green-400 cursor-pointer ml-1 mr-0.5 h-6"
                         disabled={!amount}
                         title="Apply"
                       >
@@ -171,7 +171,7 @@ export function UserTable({ users: initialUsers, pagination: initialPagination }
                           setEditingUserId(null);
                           setAmount(0);
                         }}
-                        className="bg-red-600 hover:bg-red-700 text-white px-2 py-0.5 rounded text-base border border-red-400 shadow-sm font-bold focus:outline-none focus:ring-2 focus:ring-red-400 cursor-pointer"
+                        className="bg-red-600 hover:bg-red-700 text-white px-1.5 py-0.5 rounded text-sm border border-red-400 shadow-sm font-bold focus:outline-none focus:ring-2 focus:ring-red-400 cursor-pointer mx-0.5 h-6"
                         title="Cancel"
                       >
                         <span className="text-white">X</span>
@@ -181,7 +181,7 @@ export function UserTable({ users: initialUsers, pagination: initialPagination }
                     <div className="relative group">
                       <button
                         onClick={(e) => handleShowCreditInput(user, e)}
-                        className="cursor-pointer bg-blue-500 hover:bg-blue-600 text-white px-2 py-0.5 rounded text-xs flex items-center justify-center"
+                        className="cursor-pointer bg-blue-500 hover:bg-blue-600 text-white px-2 py-0.5 rounded text-xs flex items-center justify-center h-6"
                         title="Credit/Debit"
                       >
                         <span className="material-icons text-sm whitespace-nowrap">credit</span>
