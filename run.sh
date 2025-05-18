@@ -115,6 +115,10 @@ case "$1" in
     echo "✅ Setup complete! Services are running..."
     echo "📱 Frontend: http://localhost:3000"
     echo "🔌 Backend API: http://localhost:3001"
+
+    # Open browser after everything is ready
+    echo "🌐 Opening browser to http://localhost:3000"
+    open "http://localhost:3000"
     ;;
     
   *)
