@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { toast } from 'react-hot-toast';
+import CurrencyInput from 'react-currency-input-field';
 
 import { fetchUsers } from "@/app/actions";
 import { User } from "@/app/types";
@@ -173,14 +174,16 @@ export function UserTable({ users: initialUsers, pagination: initialPagination }
                 <div className="flex items-center gap-1 w-full h-6">
                   {editingUserId === user.id ? (
                     <>
-                      <input
-                        type="number"
-                        placeholder="Amt"
-                        className="w-16 px-1 py-0.5 bg-gray-700 text-white rounded border border-gray-600 text-xs h-6"
-                        onChange={(e) => {
-                          setAmount(Number(e.target.value));
+                      <CurrencyInput
+                        placeholder="Amount"
+                        className="w-24 px-1 py-0.5 bg-gray-700 text-white rounded border border-gray-600 text-xs h-6"
+                        decimalsLimit={2}
+                        prefix="$"
+                        onValueChange={(value) => {
+                          setAmount(value ? Number(value) : 0);
                           setSelectedUser(user);
                         }}
+                        allowNegativeValue={true}
                         autoFocus
                       />
                       <button
@@ -206,10 +209,9 @@ export function UserTable({ users: initialUsers, pagination: initialPagination }
                     <div className="relative group">
                       <button
                         onClick={(e) => handleShowCreditInput(user, e)}
-                        className="cursor-pointer bg-blue-500 hover:bg-blue-600 text-white px-2 py-0.5 rounded text-xs flex items-center justify-center h-6"
-                        title="Credit/Debit"
+                        className="cursor-pointer bg-blue-500 hover:bg-blue-600 text-white px-2 py-0.5 rounded text-xs flex items-center justify-center h-6 w-24"
                       >
-                        <span className="material-icons text-sm whitespace-nowrap">credit</span>
+                        <span className="material-icons text-sm whitespace-nowrap">credit / debit</span>
                       </button>
                     </div>
                   )}
