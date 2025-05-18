@@ -2,6 +2,14 @@ import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateCol
 
 import { User } from "./user"
 
+export enum TransactionType {
+    DEPOSIT = 'deposit',
+    WITHDRAW = 'withdraw',
+    BET = 'bet',
+    WIN = 'win',
+    ADMIN_ADJUST = 'admin-adjust'
+}
+
 @Entity('transactions')
 export class Transaction {
     @PrimaryGeneratedColumn("uuid", { name: "id" })
@@ -16,6 +24,13 @@ export class Transaction {
 
     @Column({ name: "user_id" })
     userId!: string
+
+    @Column({ 
+        name: "type",
+        type: "enum",
+        enum: TransactionType
+    })
+    type!: TransactionType
 
     @CreateDateColumn({ name: "created_at" })
     createdAt!: Date

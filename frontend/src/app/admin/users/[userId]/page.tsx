@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 
 import { TransactionTable } from "@/app/admin/users/[userId]/components/transaction-table";
 import Logo from "@/app/static/logo.jpg";
-import { getUser, getUserTransactions } from "@/app/utils";
+import { getUser, getUserTransactions, toMoneyString } from "@/app/utils";
 
 
 type Props = {
@@ -25,7 +25,7 @@ export default async function UserDetailPage({ params }: Props) {
         <Image src={Logo} alt="Logo" width={40} height={40} className="rounded-md" />
         <div className="flex flex-col">
           <h1 className="text-xl font-bold mb-1 text-white">
-            {user.name} ({user.email}) - Balance: ${user.balance}
+            {user.name} ({user.email}) - Balance: {toMoneyString(user.balance)}
           </h1>
           <h3 className="text-lg font-bold text-white">
           User ID: {user.id}

@@ -11,6 +11,7 @@ export interface Transaction {
     id: string;
     userId: string;
     amount: number;
+    type: string;
     createdAt: string;
     updatedAt: string;
 }

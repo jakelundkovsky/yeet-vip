@@ -165,7 +165,7 @@ export function UserTable({ users: initialUsers, pagination: initialPagination }
                 {user.email}
               </div>
               <div className="px-3 py-2 text-gray-300 flex items-center">
-                ${Number(user.balance).toFixed(2)}
+                {toMoneyString(user.balance)}
               </div>
               <div className="px-3 py-2 text-gray-300 flex items-center">
                 {new Date(user.createdAt).toLocaleDateString()}
@@ -245,7 +245,7 @@ export function UserTable({ users: initialUsers, pagination: initialPagination }
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
           <div className="bg-gray-800 p-4 rounded-lg w-80">
             <p className="text-gray-300 mb-4">
-              Confirm {amount > 0 ? 'credit' : 'debit'} of ${Math.abs(amount)} for {selectedUser?.name}?
+              Confirm {amount > 0 ? 'credit' : 'debit'} of {toMoneyString(Math.abs(amount))} for {selectedUser?.name}?
             </p>
             <div className="flex justify-end gap-2">
               <button

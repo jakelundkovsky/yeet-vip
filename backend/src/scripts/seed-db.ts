@@ -1,7 +1,7 @@
 import { faker } from "@faker-js/faker"
 
 import { AppDataSource } from "../data-source";
-import { Transaction } from "../entities/transaction"
+import { Transaction, TransactionType } from "../entities/transaction"
 import { User } from "../entities/user"
 
 async function seed() {
@@ -35,6 +35,7 @@ async function seed() {
             deposit.amount = initialDeposit
             deposit.user = user
             deposit.userId = user.id
+            deposit.type = TransactionType.DEPOSIT
             // Create first transaction within 1 hour of user creation
             deposit.createdAt = faker.date.between({
                 from: user.createdAt,
@@ -61,6 +62,10 @@ async function seed() {
                         transaction.amount = -debitAmount
                         transaction.user = user
                         transaction.userId = user.id
+                        // 80% chance of BET, 20% chance of WITHDRAW for debits
+                        transaction.type = faker.number.float({ min: 0, max: 1 }) < 0.8 
+                            ? TransactionType.BET 
+                            : TransactionType.WITHDRAW
                         // Create transaction between user creation and now
                         transaction.createdAt = faker.date.between({
                             from: user.createdAt,
@@ -75,6 +80,10 @@ async function seed() {
                     transaction.amount = depositAmount
                     transaction.user = user
                     transaction.userId = user.id
+                    // 70% chance of WIN, 30% chance of DEPOSIT for credits
+                    transaction.type = faker.number.float({ min: 0, max: 1 }) < 0.7
+                        ? TransactionType.WIN
+                        : TransactionType.DEPOSIT
                     // Create transaction between user creation and now
                     transaction.createdAt = faker.date.between({
                         from: user.createdAt,

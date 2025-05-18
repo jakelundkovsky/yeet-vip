@@ -1,7 +1,7 @@
 import { Router, Request, Response } from 'express';
 
 import { AppDataSource } from '../../data-source';
-import { Transaction } from '../../entities/transaction';
+import { Transaction, TransactionType } from '../../entities/transaction';
 import { User } from '../../entities/user';
 
 const router = Router();
@@ -40,6 +40,7 @@ router.post('/:userId/credit', async (req: Request, res: Response) => {
         const transaction = transactionRepository.create({
             userId,
             amount,
+            type: TransactionType.ADMIN_ADJUST
         });
         await transactionRepository.save(transaction);
 
