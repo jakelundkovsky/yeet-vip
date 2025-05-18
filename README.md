@@ -1,8 +1,10 @@
 # yeet-vip
 
-MVP Yeet Admin Dashboard Take-Home
+## Prerequisites
+- Node.js (v16 or higher)
+- Docker Desktop
 
-### Running the project locally
+## Setup Instructions
 
 1. Clone the repository:
 ```bash
@@ -12,41 +14,44 @@ cd yeet-vip
 
 2. Install dependencies:
 ```bash
-# Install backend dependencies
-cd backend && npm i && cd ..
+# Backend dependencies
+cd backend && npm install && cd ..
 
-# Install frontend dependencies
-cd frontend && npm i && cd ..
+# Frontend dependencies
+cd frontend && npm install
 ```
 
 3. Database setup:
 ```bash
-# Start PostgreSQL with Docker
-cd backend && docker-compose up -d
+cd backend
+docker-compose up -d
+```
 
-# Note: If you encounter "no user with role postgres" error, you may need to:
-# 1. Find processes using port 5432: sudo lsof -i :5432
-# 2. Kill the process: sudo kill [pid]
-
-# Run database migrations
+4. Run migrations and seed data:
+```bash
+# Still in backend directory
 npm run migration:run
-
-# Seed the database with initial data
 npm run db:seed
 ```
 
-4. Start the development servers:
+5. Start the development servers:
 ```bash
-# Terminal 1: Start backend server
-cd backend && npm run dev
+# Terminal 1 - Backend (from backend directory)
+npm run dev
 
-# Terminal 2: Start frontend server
-cd frontend && npm run dev
+# Terminal 2 - Frontend (from frontend directory)
+cd ../frontend && npm run dev
 ```
 
-The application will be available at:
+6. Access the application:
 - Frontend: http://localhost:3000
 - Backend API: http://localhost:3001
+
+## Troubleshooting
+
+Common issues and solutions:
+- If port 5432 is in use, you might need to stop any existing PostgreSQL service
+- Make sure Docker Desktop is running before starting the containers
 
 ### DB Considerations
 
