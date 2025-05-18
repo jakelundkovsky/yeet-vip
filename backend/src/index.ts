@@ -1,20 +1,20 @@
 import cors from 'cors';
-import dotenv from 'dotenv';
-import express from 'express';
+import { config } from 'dotenv';
+import express, { json } from 'express';
 
 import { AppDataSource } from './data-source';
 import usersRouter from './routes/users';
 
 // load environment variables
-dotenv.config();
+config();
 
 // initialize express app
 const app = express();
-const PORT = process.env.PORT || 3001;
+const PORT = process.env['PORT'] || 3001;
 
 // middleware
 app.use(cors());
-app.use(express.json());
+app.use(json());
 
 // initialize TypeORM
 AppDataSource.initialize()

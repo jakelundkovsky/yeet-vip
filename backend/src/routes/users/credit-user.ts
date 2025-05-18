@@ -50,9 +50,11 @@ router.post('/:userId/credit', async (req: Request, res: Response) => {
             newBalance: user.balance,
             transaction
         });
+        return;
     } catch (error) {
         console.error('Error processing transaction:', error);
         res.status(500).json({ error: 'Internal server error' });
+        return;
     }
 });
 

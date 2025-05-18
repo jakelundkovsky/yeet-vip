@@ -9,10 +9,10 @@ router.get('/', async (req, res) => {
     try {
         const userRepository = AppDataSource.getRepository(User);
         
-        const page = Number(req.query.page) || 1;
-        const limit = Number(req.query.limit) || 10;
-        const sortBy = String(req.query.sortBy || 'createdAt');
-        const sortOrder = String(req.query.sortOrder || 'DESC').toUpperCase();
+        const page = Number(req.query['page']) || 1;
+        const limit = Number(req.query['limit']) || 10;
+        const sortBy = String(req.query['sortBy'] || 'createdAt');
+        const sortOrder = String(req.query['sortOrder'] || 'DESC').toUpperCase();
         
         // Validate sort parameters
         const allowedSortFields = ['name', 'email', 'balance', 'createdAt'];
@@ -40,9 +40,11 @@ router.get('/', async (req, res) => {
                 itemsPerPage: limit
             }
         });
+        return;
     } catch (error) {
         console.error('Error fetching users:', error);
         res.status(500).json({ error: 'Internal server error' });
+        return;
     }
 });
 
