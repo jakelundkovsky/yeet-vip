@@ -46,3 +46,10 @@ export async function updateUserCredit(userId: string, amount: number): Promise<
         body: JSON.stringify({ amount }),
     });
 }
+
+export function toMoneyString(amount: number): string {
+    return new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: 'USD',
+    }).format(amount);
+}

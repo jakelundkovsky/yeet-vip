@@ -6,7 +6,7 @@ import CurrencyInput from 'react-currency-input-field';
 
 import { fetchUsers } from "@/app/actions";
 import { User } from "@/app/types";
-import { updateUserCredit } from "@/app/utils";
+import { toMoneyString, updateUserCredit } from "@/app/utils";
 
 interface Props {
     users: User[];
@@ -82,7 +82,7 @@ export function UserTable({ users: initialUsers, pagination: initialPagination }
         setAmount(0);
         setEditingUserId(null);
         
-        toast.success(`Success! ${selectedUser.name}'s balance updated by $${amount}`);
+        toast.success(`Success! ${selectedUser.name}'s balance updated by ${toMoneyString(amount)}`);
 
       } catch (error) {
         toast.error('Failed to update user balance. Please try again.');
