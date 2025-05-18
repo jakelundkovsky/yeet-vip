@@ -8,6 +8,16 @@ import { fetchUsers } from "@/app/actions";
 import { User } from "@/app/types";
 import { toMoneyString, updateUserCredit } from "@/app/utils";
 
+function FormattedDate({ date }: { date: string }) {
+  const [formattedDate, setFormattedDate] = useState<string>("");
+  
+  useEffect(() => {
+    setFormattedDate(new Date(date).toLocaleDateString());
+  }, [date]);
+
+  return <span>{formattedDate}</span>;
+}
+
 interface Props {
     users: User[];
     pagination: {
@@ -165,7 +175,7 @@ export function UserTable({ users: initialUsers, pagination: initialPagination }
                 {toMoneyString(user.balance)}
               </div>
               <div className="px-3 py-2 text-gray-300 flex items-center">
-                {new Date(user.createdAt).toLocaleDateString()}
+                <FormattedDate date={user.createdAt} />
               </div>
               <div className="px-3 py-2 text-gray-300 flex items-center" onClick={e => e.stopPropagation()}>
                 <div className="flex items-center gap-1 w-full h-6">

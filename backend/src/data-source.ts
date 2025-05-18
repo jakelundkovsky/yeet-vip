@@ -4,13 +4,16 @@ import { DataSource } from "typeorm";
 import { Transaction } from "./entities/transaction";
 import { User } from "./entities/user";
 
+const dbUrl = process.env['DATABASE_URL'] || "postgresql://postgres:postgres@localhost:5432/yeet_vip";
+const url = new URL(dbUrl);
+
 export const AppDataSource = new DataSource({
     type: "postgres",
-    host: process.env['DB_HOST'] || "localhost",
-    port: parseInt(process.env['DB_PORT'] || "5432"),
-    username: process.env['DB_USERNAME'] || "postgres",
-    password: process.env['DB_PASSWORD'] || "postgres",
-    database: process.env['DB_NAME'] || "yeet_vip",
+    host: url.hostname,
+    port: parseInt(url.port || "5432"),
+    username: url.username,
+    password: url.password,
+    database: url.pathname.slice(1),
     synchronize: false,
     logging: true,
     entities: [User, Transaction],

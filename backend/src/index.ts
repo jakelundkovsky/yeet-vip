@@ -13,17 +13,27 @@ const app = express();
 const PORT = process.env['PORT'] || 3001;
 
 // middleware
-app.use(cors());
+app.use(cors({
+  origin: ['http://localhost:3000', 'http://127.0.0.1:3000'],
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
 app.use(json());
 
-// initialize TypeORM
-AppDataSource.initialize()
-  .then(() => {
-    console.log("Data Source has been initialized!");
-  })
-  .catch((err) => {
-    console.error("Error during Data Source initialization:", err);
-  });
+// health check endpoint
+app.get('/health', async (_, res) => {
+  try {
+    if (!AppDataSource.isInitialized) {
+      await AppDataSource.initialize();
+    }
+    // Test database connection
+    await AppDataSource.query('SELECT 1');
+    res.status(200).json({ status: 'healthy' });
+  } catch (error: any) {
+    res.status(500).json({ status: 'unhealthy', error: error.message });
+  }
+});
 
 // mount user routes
 app.use('/api/users', usersRouter);

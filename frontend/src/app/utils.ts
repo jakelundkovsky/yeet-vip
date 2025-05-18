@@ -1,45 +1,84 @@
 import { User, Transaction } from "./types";
 
-const BASE_API_URL = 'http://localhost:3001/api';
+const isServer = typeof window === 'undefined';
+
+function getBaseUrl() {
+    if (isServer) {
+        // Server-side: use internal Docker network
+        return 'http://backend:3001/api';
+    }
+    // Client-side: use the environment variable or fallback
+    return process.env.NEXT_PUBLIC_API_URL 
+        ? `${process.env.NEXT_PUBLIC_API_URL}/api` 
+        : 'http://localhost:3001/api';
+}
+
+// Default fetch options to ensure consistent behavior
+const defaultFetchOptions: RequestInit = {
+    headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+    },
+    // Only include credentials on client-side
+    ...(isServer ? {} : { credentials: 'include' }),
+    cache: 'no-store'
+};
+
+async function fetchWithError(url: string, options: RequestInit = {}): Promise<Response> {
+    const baseUrl = getBaseUrl();
+    const fetchUrl = url.startsWith('http') ? url : `${baseUrl}${url.startsWith('/') ? url : `/${url}`}`;
+    
+    const response = await fetch(fetchUrl, {
+        ...defaultFetchOptions,
+        ...options,
+        headers: {
+            ...defaultFetchOptions.headers,
+            ...options.headers
+        }
+    });
+
+    if (!response.ok) {
+        const error = await response.json().catch(() => ({ message: 'An error occurred' }));
+        throw new Error(error.message || `HTTP error! status: ${response.status}`);
+    }
+
+    return response;
+}
 
 export async function getUser(userId: string): Promise<User> {
-    const res = await fetch(`${BASE_API_URL}/users/${userId}`, { cache: 'no-store' });
+    const res = await fetchWithError(`/users/${userId}`);
     const data = await res.json();
     return data.user;
 }
 
-export async function getUsers(sortBy?: string, sortOrder?: 'ASC' | 'DESC', page?: number): Promise<{ users: User[]; pagination: {
-    currentPage: number;
-    totalPages: number;
-    totalItems: number;
-    itemsPerPage: number;
-} }> {
+export async function getUsers(sortBy?: string, sortOrder?: 'ASC' | 'DESC', page?: number): Promise<{
+    users: User[];
+    pagination: {
+        currentPage: number;
+        totalPages: number;
+        totalItems: number;
+        itemsPerPage: number;
+    }
+}> {
     const params = new URLSearchParams();
     if (sortBy) params.append('sortBy', sortBy);
     if (sortOrder) params.append('sortOrder', sortOrder);
     if (page) params.append('page', page.toString());
 
-    const res = await fetch(`${BASE_API_URL}/users?${params.toString()}`, { 
-        cache: 'no-store',
-        credentials: 'include'
-    });
-    const data = await res.json();
-
-    return data;
+    const queryString = params.toString();
+    const res = await fetchWithError(`/users${queryString ? `?${queryString}` : ''}`);
+    return await res.json();
 }
 
 export async function getUserTransactions(userId: string): Promise<Transaction[]> {
-    const res = await fetch(`${BASE_API_URL}/users/${userId}/transactions`, { cache: 'no-store' });
+    const res = await fetchWithError(`/users/${userId}/transactions`);
     const data = await res.json();
     return data.transactions;
 }
 
 export async function updateUserCredit(userId: string, amount: number): Promise<void> {
-    await fetch(`${BASE_API_URL}/users/${userId}/credit`, {
+    await fetchWithError(`/users/${userId}/credit`, {
         method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
         body: JSON.stringify({ amount }),
     });
 }

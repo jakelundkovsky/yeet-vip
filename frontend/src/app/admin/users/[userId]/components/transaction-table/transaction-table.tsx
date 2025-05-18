@@ -2,6 +2,7 @@
 
 import { Transaction } from "@/app/types";
 import { toMoneyString } from "@/app/utils";
+import { useEffect, useState } from "react";
 
 interface Props {
     transactions: Transaction[];
@@ -22,7 +23,7 @@ export function TransactionTable({ transactions }: Props) {
             key={transaction.id}
             className="grid grid-cols-[1fr_1fr_1fr_1fr] border-t border-gray-700 hover:bg-gray-700 text-xs"
           >
-            <div className="px-3 py-2 text-gray-300 truncate" title={transaction.id}>
+            <div className="px-3 py-2 text-gray-300" title={transaction.id}>
               {transaction.id}
             </div>
             <div className="px-3 py-2 text-gray-300">
@@ -32,11 +33,21 @@ export function TransactionTable({ transactions }: Props) {
               {transaction.type}
             </div>
             <div className="px-3 py-2 text-gray-300">
-              {new Date(transaction.createdAt).toLocaleDateString()}
+              <FormattedDate date={transaction.createdAt} />
             </div>
           </div>
         ))}
       </div>
     </div>
   );
-} 
+}
+
+function FormattedDate({ date }: { date: string }) {
+  const [formattedDate, setFormattedDate] = useState<string>("");
+  
+  useEffect(() => {
+    setFormattedDate(new Date(date).toLocaleString());
+  }, [date]);
+
+  return <span>{formattedDate}</span>;
+}
