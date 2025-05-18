@@ -4,7 +4,7 @@ import { User } from "./user"
 
 @Entity('transactions')
 export class Transaction {
-    @PrimaryGeneratedColumn("uuid")
+    @PrimaryGeneratedColumn("uuid", { name: "id" })
     id!: string
 
     @Column({ type: "decimal"})
