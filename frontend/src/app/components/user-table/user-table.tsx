@@ -32,8 +32,6 @@ export function UserTable({ users: initialUsers, pagination: initialPagination }
   useEffect(() => {
     const fetchSortedUsers = async () => {
       const { users: sortedUsers, pagination: newPagination } = await fetchUsers(sortBy, sortOrder, currentPage);
-      console.log('Fetched users:', sortedUsers);
-      console.log('New pagination:', newPagination);
       setUsers(sortedUsers);
       setPagination(newPagination);
     };
@@ -83,7 +81,6 @@ export function UserTable({ users: initialUsers, pagination: initialPagination }
         setEditingUserId(null);
         
         toast.success(`Success! ${selectedUser.name}'s balance updated by ${toMoneyString(amount)}`);
-
       } catch (error) {
         toast.error('Failed to update user balance. Please try again.');
       }
@@ -101,7 +98,7 @@ export function UserTable({ users: initialUsers, pagination: initialPagination }
     return (
       <div className="overflow-x-auto h-full flex flex-col rounded-lg">
         <div className="min-w-full w-full bg-gray-800 border border-gray-700 flex-1 rounded-lg">
-          <div className="grid grid-cols-[1fr_1.5fr_1fr_1fr_1fr_1.5fr] w-full">
+          <div className="grid grid-cols-[1.5fr_1.2fr_1fr_1fr_1fr_1.2fr] w-full">
             <div className="px-3 py-2 text-left text-gray-200 bg-gray-700 text-xs flex items-center h-10">ID</div>
             <div className="px-3 py-2 text-left text-gray-200 bg-gray-700 text-xs flex items-center h-10">Name</div>
             <div className="px-3 py-2 text-left text-gray-200 bg-gray-700 text-xs flex items-center h-10">Email</div>
@@ -121,7 +118,7 @@ export function UserTable({ users: initialUsers, pagination: initialPagination }
     <>
       <div className="overflow-x-auto h-full flex flex-col">
         <div className="min-w-full w-full bg-gray-800 border border-gray-700 rounded-lg flex-1">
-          <div className="grid grid-cols-[1fr_1.5fr_1fr_1fr_1fr_1.5fr] w-full">
+          <div className="grid grid-cols-[1.5fr_1.2fr_1fr_1fr_1fr_1.2fr] w-full">
             <div className="px-3 py-2 text-left text-gray-200 bg-gray-700 text-xs flex items-center h-10">ID</div>
             <div 
               className="px-3 py-2 text-left text-gray-200 bg-gray-700 text-xs cursor-pointer hover:bg-gray-600 flex items-center h-10"
@@ -152,7 +149,7 @@ export function UserTable({ users: initialUsers, pagination: initialPagination }
           {currentUsers.map((user) => (
             <div
               key={user.id}
-              className="grid grid-cols-[1fr_1.5fr_1fr_1fr_1fr_1.5fr] border-t border-gray-700 hover:bg-gray-700 cursor-pointer text-xs h-10"
+              className="grid grid-cols-[1.5fr_1.2fr_1fr_1fr_1fr_1.2fr] border-t border-gray-700 hover:bg-gray-700 cursor-pointer text-xs h-10"
               onClick={() => window.open(`/admin/users/${user.id}`, '_blank')}
             >
               <div className="px-3 py-2 text-gray-300 truncate flex items-center" title={user.id}>

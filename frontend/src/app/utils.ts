@@ -19,15 +19,12 @@ export async function getUsers(sortBy?: string, sortOrder?: 'ASC' | 'DESC', page
     if (sortOrder) params.append('sortOrder', sortOrder);
     if (page) params.append('page', page.toString());
 
-    console.log(`${BASE_API_URL}/users?${params.toString()}`);
-    
     const res = await fetch(`${BASE_API_URL}/users?${params.toString()}`, { 
         cache: 'no-store',
         credentials: 'include'
     });
     const data = await res.json();
 
-    console.log(data);
     return data;
 }
 
