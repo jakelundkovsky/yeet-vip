@@ -24,8 +24,14 @@ case "$1" in
   "up")
     docker-compose up -d
     echo "🚀 All services are starting..."
-    echo "📱 Frontend will be available at: http://localhost:3000"
-    echo "🔌 Backend API will be available at: http://localhost:3001"
+    
+    # Wait for services to be ready
+    wait_for_db
+    wait_for_backend
+    
+    echo "✅ All services are ready!"
+    echo "📱 Frontend: http://localhost:3000"
+    echo "🔌 Backend API: http://localhost:3001"
     ;;
     
   "down")
@@ -54,7 +60,7 @@ case "$1" in
   "clean")
     echo "🧹 Cleaning up Docker resources..."
     
-    # Stop and remove containers
+    # Stop containers but preserve volumes
     docker-compose down --remove-orphans
     
     # Remove project-specific containers if any still exist
@@ -71,18 +77,44 @@ case "$1" in
       docker rmi -f $images
     fi
     
-    # Remove project-specific volumes
-    volumes=$(docker volume ls | grep "yeet-vip" | awk '{print $2}')
-    if [ ! -z "$volumes" ]; then
-      echo "Removing project volumes..."
-      docker volume rm -f $volumes
-    fi
-    
-    # Remove any dangling images and volumes
+    # Remove any dangling images
     echo "Cleaning up dangling resources..."
     docker system prune -f
     
-    echo "✨ Cleanup complete! You can now start fresh with './run.sh setup'"
+    echo "✨ Cleanup complete! Database data is preserved. Use './run.sh purge' for full cleanup including database."
+    ;;
+
+  "purge")
+    echo "🧨 WARNING: This will remove ALL project data including the database..."
+    read -p "Are you sure? [y/N] " -n 1 -r
+    echo
+    if [[ $REPLY =~ ^[Yy]$ ]]
+    then
+      # Stop and remove everything including volumes
+      docker-compose down --volumes --remove-orphans
+      
+      # Remove all project resources
+      containers=$(docker ps -a | grep "yeet_vip" | awk '{print $1}')
+      if [ ! -z "$containers" ]; then
+        docker rm -f $containers
+      fi
+      
+      images=$(docker images | grep "yeet-vip" | awk '{print $3}')
+      if [ ! -z "$images" ]; then
+        docker rmi -f $images
+      fi
+      
+      volumes=$(docker volume ls | grep "yeet-vip" | awk '{print $2}')
+      if [ ! -z "$volumes" ]; then
+        docker volume rm -f $volumes
+      fi
+      
+      docker system prune -f
+      
+      echo "💥 Full purge complete! You can now start fresh with './run.sh setup'"
+    else
+      echo "Purge cancelled"
+    fi
     ;;
 
   "dev")
@@ -128,7 +160,8 @@ case "$1" in
     echo "  down      - Stop all services"
     echo "  logs      - View logs (optionally specify service name)"
     echo "  restart   - Restart services (optionally specify service name)"
-    echo "  clean     - Remove all Docker resources for this project"
+    echo "  clean     - Remove containers and images but preserve database"
+    echo "  purge     - Remove ALL resources including database data"
     echo "  dev       - Install dependencies locally for development"
     echo "  setup     - First-time setup (runs migrations and seeds)"
     ;;
