@@ -1,4 +1,4 @@
-import { AdminPanel } from "@/app/components/admin-panel";
+import { AdminPanel } from "@/app/admin/components/admin-panel";
 import { getUsers } from "@/app/utils";
 
 export default async function AdminPage() {

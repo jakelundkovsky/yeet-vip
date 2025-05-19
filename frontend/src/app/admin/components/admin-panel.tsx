@@ -1,9 +1,7 @@
 'use client';
 
 import Image from "next/image";
-import { useState } from "react";
-
-import { UserTable } from "@/app/components/user-table";
+import { UserTable } from "@/app/admin/components/user-table";
 import Logo from "@/app/static/logo.jpg";
 import { User } from "@/app/types";
 
@@ -18,9 +16,6 @@ interface AdminPanelProps {
 }
 
 export function AdminPanel({ initialUsers, initialPagination }: AdminPanelProps) {
-  const [users, setUsers] = useState(initialUsers);
-  const [pagination, setPagination] = useState(initialPagination);
-
   return (
     <div className="p-8 bg-gray-900 min-h-screen">
       <div className="flex items-center gap-2 mb-6">
@@ -28,7 +23,7 @@ export function AdminPanel({ initialUsers, initialPagination }: AdminPanelProps)
         <h1 className="text-2xl font-bold text-white">VIP Admin Panel</h1>
       </div>
 
-      <UserTable users={users} pagination={pagination} />
+      <UserTable users={initialUsers} pagination={initialPagination} />
     </div>
   );
 } 
