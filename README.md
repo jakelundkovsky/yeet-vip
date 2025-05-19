@@ -63,7 +63,7 @@ npm run db:seed      # Seed fresh data
 
 #### Get Users List
 ```http
-GET /api/v1/users
+GET /api/users
 ```
 
 Query Parameters:
@@ -76,7 +76,7 @@ Query Parameters:
 
 Example Request:
 ```http
-GET /api/v1/users?page=1&limit=10&sortBy=balance&sortOrder=DESC
+GET /api/users?page=1&limit=10&sortBy=balance&sortOrder=DESC
 ```
 
 Response:
@@ -102,7 +102,7 @@ Response:
 
 #### Get Single User
 ```http
-GET /api/v1/users/:userId
+GET /api/users/:userId
 ```
 
 Parameters:
@@ -110,7 +110,7 @@ Parameters:
 
 Example Request:
 ```http
-GET /api/v1/users/123e4567-e89b-12d3-a456-426614174000
+GET /api/users/123e4567-e89b-12d3-a456-426614174000
 ```
 
 Response:
@@ -128,7 +128,7 @@ Response:
 
 #### Credit/Debit User Balance
 ```http
-POST /api/v1/users/:userId/credit
+POST /api/users/:userId/credit
 ```
 
 Parameters:
@@ -143,7 +143,7 @@ Request Body:
 
 Example Request:
 ```http
-POST /api/v1/users/123e4567-e89b-12d3-a456-426614174000/credit
+POST /api/users/123e4567-e89b-12d3-a456-426614174000/credit
 Content-Type: application/json
 
 {
@@ -153,7 +153,7 @@ Content-Type: application/json
 
 Example Debit Request:
 ```http
-POST /api/v1/users/123e4567-e89b-12d3-a456-426614174000/credit
+POST /api/users/123e4567-e89b-12d3-a456-426614174000/credit
 Content-Type: application/json
 
 {
@@ -200,7 +200,7 @@ Error Responses:
 
 #### Get User Transactions
 ```http
-GET /api/v1/users/:userId/transactions
+GET /api/users/:userId/transactions
 ```
 
 Parameters:
@@ -208,7 +208,7 @@ Parameters:
 
 Example Request:
 ```http
-GET /api/v1/users/123e4567-e89b-12d3-a456-426614174000/transactions
+GET /api/users/123e4567-e89b-12d3-a456-426614174000/transactions
 ```
 
 Response:
