@@ -266,13 +266,10 @@ Response:
 - Full transaction history maintained for compliance and reconciliation
 
 ### Current Design Decisions
-- RESTful API chosen over GraphQL for simpler caching and security
 - Server Components for initial loads, Client Components for interactivity
 - UUID-based identifiers to prevent enumeration attacks
 - Decimal(10,2) for financial calculations*
 - Transaction log as source of truth for all balance changes
-- Server-side pagination for large datasets
-- Optimistic updates for improved UX
 
 *Note: Current decimal precision is optimized for fiat-like transactions. For specific cryptocurrencies (especially those requiring atomic unit precision like satoshis/wei), the decimal handling strategy would need to be adjusted to use BigInt and chain-specific decimal places.
 
@@ -293,6 +290,7 @@ Response:
 #### Performance
 - Client-side search/filter capabilities
 - Improved concurrent transaction handling
+- Optimistic updates for improved UX
 
 #### User Experience
 - Real-time updates
@@ -300,6 +298,7 @@ Response:
 - Implement mobile-responsive design
 - Improved error monitoring and logging
 - Comprehensive testing suite (E2E, integration, unit)
+- Cleaner design (leverage existing component libraries e.g. shadcn)
 
 #### Development
 - Type definitions cleanup
