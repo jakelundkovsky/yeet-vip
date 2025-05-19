@@ -38,21 +38,10 @@ This will:
 ./run.sh restart   # Restart all services (or ./run.sh restart backend for specific)
 ./run.sh clean     # Remove all Docker resources for fresh start
 ./run.sh dev       # Install dependencies for local development
+./run.sh purge     # Remove all Docker resources and node_modules for complete reset
 ```
 
-### Frontend (run from /frontend directory)
-```bash
-npm run dev    # Start dev server
-```
-
-### Backend (run from /backend directory)
-```bash
-npm run dev          # Start dev server
-npm run db:reset     # Reset database
-npm run db:seed      # Seed fresh data
-```
-
-## Troubleshooting
+### Troubleshooting
 - If port 5432 is in use, stop any existing PostgreSQL service
 - If setup fails, make sure Docker Desktop is actually running
 - For clean slate: run `./run.sh clean` then `./run.sh setup`
@@ -232,3 +221,88 @@ Response:
   ]
 }
 ```
+
+## Design Considerations
+
+### Architecture Overview
+- **Frontend**: Next.js 14 with React Server Components + TypeScript
+- **Backend**: Express.js + TypeORM
+- **Database**: PostgreSQL with decimal-based financial calculations
+
+### Database Schema
+![Database Schema](db-schema.png)
+
+#### Table Structure
+
+##### Users
+- `id` (UUID): Primary key
+- `name` (string): User's display name
+- `email` (string, unique): User's email address
+- `balance` (decimal(10,2))*: Current account balance
+- `created_at` (timestamp): Account creation timestamp
+- `updated_at` (timestamp): Last update timestamp
+
+##### Transactions
+- `id` (UUID): Primary key
+- `user_id` (UUID): Foreign key to users table
+- `amount` (decimal): Transaction amount
+- `type` (enum): Transaction type, one of:
+  - `deposit`: Funds added to account
+  - `withdraw`: Funds removed from account
+  - `bet`: Wager placed
+  - `win`: Winning payout
+  - `admin-adjust`: Manual balance adjustment
+- `created_at` (timestamp): Transaction creation timestamp
+- `updated_at` (timestamp): Last update timestamp
+
+*Note: Current decimal precision is optimized for fiat-like transactions. For specific cryptocurrencies (especially those requiring atomic unit precision like satoshis/wei), the decimal handling strategy would need to be adjusted to use BigInt and chain-specific decimal places.
+
+#### Key Design Choices
+- UUID primary keys for enhanced security and distributed scalability
+- Timestamps on all records for comprehensive audit trail
+- Enum types for transaction categorization
+- Many-to-one relationship between transactions and users
+- Balance stored directly on user record for quick access
+- Full transaction history maintained for compliance and reconciliation
+
+### Current Design Decisions
+- RESTful API chosen over GraphQL for simpler caching and security
+- Server Components for initial loads, Client Components for interactivity
+- UUID-based identifiers to prevent enumeration attacks
+- Decimal(10,2) for financial calculations*
+- Transaction log as source of truth for all balance changes
+- Server-side pagination for large datasets
+- Optimistic updates for improved UX
+
+*Note: Current decimal precision is optimized for fiat-like transactions. For specific cryptocurrencies (especially those requiring atomic unit precision like satoshis/wei), the decimal handling strategy would need to be adjusted to use BigInt and chain-specific decimal places.
+
+### Known Limitations
+- Poll-based updates (no real-time)
+- Basic rate limiting implementation
+- Limited transaction rollback support
+- Potential race conditions during high-frequency balance updates
+- No automatic balance-to-transaction reconciliation
+
+### Future Roadmap
+
+#### Security & Compliance
+- Enhanced account security (2FA, account freezing)
+- Comprehensive input validation
+- User Authentication
+
+#### Performance
+- Client-side search/filter capabilities
+- Improved concurrent transaction handling
+
+#### User Experience
+- Real-time updates
+- Bulk operations support
+- Implement mobile-responsive design
+- Improved error monitoring and logging
+- Comprehensive testing suite (E2E, integration, unit)
+
+#### Development
+- Type definitions cleanup
+- Security audit implementation
+- Automated reconciliation system
+- Monitoring / logging
