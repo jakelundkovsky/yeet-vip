@@ -1,8 +1,8 @@
 import { Router } from 'express';
 
-import updateUserBalance from './update-user-balance';
 import getUser from './get-user';
 import getUsers from './get-users';
+import updateUserBalance from './update-user-balance';
 
 const userRouter = Router();
 

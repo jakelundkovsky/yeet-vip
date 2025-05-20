@@ -3,8 +3,8 @@ import { config } from 'dotenv';
 import express, { json } from 'express';
 
 import { AppDataSource } from './data-source';
-import usersRouter from './routes/users';
 import transactionsRouter from './routes/transactions';
+import usersRouter from './routes/users';
 
 // load environment variables
 config();

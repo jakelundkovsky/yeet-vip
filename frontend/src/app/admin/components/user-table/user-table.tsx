@@ -1,8 +1,8 @@
 'use client';
 
 import { useState, useEffect } from "react";
-import { toast } from 'react-hot-toast';
 import CurrencyInput from 'react-currency-input-field';
+import { toast } from 'react-hot-toast';
 
 import { fetchUsers } from "@/app/actions";
 import { User } from "@/app/types";
@@ -38,18 +38,15 @@ export function UserTable({ users: initialUsers, pagination: initialPagination }
   const [sortBy, setSortBy] = useState<string>('createdAt');
   const [sortOrder, setSortOrder] = useState<'ASC' | 'DESC'>('DESC');
   const [currentPage, setCurrentPage] = useState(pagination.currentPage);
+  const [isMounted, setIsMounted] = useState(false);
 
   const isInsufficientFunds = amount < 0 && Number((Math.abs(amount) - (selectedUser?.balance || 0)).toFixed(2)) > 0;
 
   useEffect(() => {
     const fetchSortedUsers = async () => {
       // Skip fetch on initial mount since we already have the data
-      if (
-        initialUsers.length > 0
-        && sortBy === 'createdAt'
-        && sortOrder === 'DESC'
-        && currentPage === 1
-      ) {
+      if (!isMounted) {
+        setIsMounted(true);
         return;
       }
       
@@ -62,7 +59,7 @@ export function UserTable({ users: initialUsers, pagination: initialPagination }
       }
     };
     fetchSortedUsers();
-  }, [sortBy, sortOrder, currentPage, initialUsers]);
+  }, [sortBy, sortOrder, currentPage]);
 
   const currentUsers = users;
 

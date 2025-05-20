@@ -1,6 +1,7 @@
 'use client';
 
 import Image from 'next/image';
+
 import { UserTable } from '@/app/admin/components/user-table';
 import Logo from '@/app/static/logo.jpg';
 import { User } from '@/app/types';
