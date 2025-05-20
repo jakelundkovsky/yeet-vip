@@ -4,9 +4,8 @@ import { useState, useEffect } from "react";
 import CurrencyInput from 'react-currency-input-field';
 import { toast } from 'react-hot-toast';
 
-import { fetchUsers } from "@/app/actions";
 import { User } from "@/app/types";
-import { toMoneyString, updateUserBalance } from "@/app/utils";
+import { getUsers, toMoneyString, updateUserBalance } from "@/app/utils";
 
 function FormattedDate({ date }: { date: string }) {
   const [formattedDate, setFormattedDate] = useState<string>("");
@@ -51,7 +50,7 @@ export function UserTable({ users: initialUsers, pagination: initialPagination }
       }
       
       try {
-        const { users: sortedUsers, pagination: newPagination } = await fetchUsers(sortBy, sortOrder, currentPage);
+        const { users: sortedUsers, pagination: newPagination } = await getUsers(sortBy, sortOrder, currentPage);
         setUsers(sortedUsers);
         setPagination(newPagination);
       } catch (error) {
@@ -94,7 +93,7 @@ export function UserTable({ users: initialUsers, pagination: initialPagination }
         await updateUserBalance(selectedUser.id, amount);
 
         // Refetch users to update the table
-        const { users: updatedUsers, pagination: newPagination } = await fetchUsers(sortBy, sortOrder, currentPage);
+        const { users: updatedUsers, pagination: newPagination } = await getUsers(sortBy, sortOrder, currentPage);
         setUsers(updatedUsers);
         setPagination(newPagination);
 
@@ -111,7 +110,7 @@ export function UserTable({ users: initialUsers, pagination: initialPagination }
   };
 
   const handlePageChange = async (page: number) => {
-    const { users: newUsers, pagination: newPagination } = await fetchUsers(sortBy, sortOrder, page);
+    const { users: newUsers, pagination: newPagination } = await getUsers(sortBy, sortOrder, page);
     setCurrentPage(page);
     setUsers(newUsers);
     setPagination(newPagination);
