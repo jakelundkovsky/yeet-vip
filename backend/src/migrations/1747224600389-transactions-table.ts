@@ -19,5 +19,4 @@ export class TransactionsTable1747224600389 implements MigrationInterface {
     public async down(): Promise<void> {
         // no-op
     }
-
 }

@@ -1,4 +1,4 @@
-import { User, Transaction } from "./types";
+import { User, Transaction } from './types';
 
 const isServer = typeof window === 'undefined';
 
@@ -71,13 +71,13 @@ export async function getUsers(sortBy?: string, sortOrder?: 'ASC' | 'DESC', page
 }
 
 export async function getUserTransactions(userId: string): Promise<Transaction[]> {
-    const res = await fetchWithError(`/users/${userId}/transactions`);
+    const res = await fetchWithError(`/transactions/user/${userId}`);
     const data = await res.json();
     return data.transactions;
 }
 
 export async function updateUserCredit(userId: string, amount: number): Promise<void> {
-    await fetchWithError(`/users/${userId}/credit`, {
+    await fetchWithError(`/users/${userId}/update-balance`, {
         method: 'POST',
         body: JSON.stringify({ amount }),
     });

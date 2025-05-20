@@ -134,25 +134,29 @@ export function UserTable({ users: initialUsers, pagination: initialPagination }
               className="px-3 py-2 text-left text-gray-200 bg-gray-700 text-xs cursor-pointer hover:bg-gray-600 flex items-center h-10"
               onClick={() => handleSort('name')}
             >
-              Name <SortIcon field="name" />
+              <span>Name</span>
+              <SortIcon field="name" />
             </div>
             <div 
               className="px-3 py-2 text-left text-gray-200 bg-gray-700 text-xs cursor-pointer hover:bg-gray-600 flex items-center h-10"
               onClick={() => handleSort('email')}
             >
-              Email <SortIcon field="email" />
+              <span>Email</span>
+              <SortIcon field="email" />
             </div>
             <div 
               className="px-3 py-2 text-left text-gray-200 bg-gray-700 text-xs cursor-pointer hover:bg-gray-600 flex items-center h-10"
               onClick={() => handleSort('balance')}
             >
-              Balance <SortIcon field="balance" />
+              <span>Balance</span>
+              <SortIcon field="balance" />
             </div>
             <div 
               className="px-3 py-2 text-left text-gray-200 bg-gray-700 text-xs cursor-pointer hover:bg-gray-600 flex items-center h-10"
               onClick={() => handleSort('createdAt')}
             >
-              Member Since <SortIcon field="createdAt" />
+              <span>Member Since</span>
+              <SortIcon field="createdAt" />
             </div>
             <div className="px-3 py-2 text-left text-gray-200 bg-gray-700 text-xs flex items-center h-10">Actions</div>
           </div>

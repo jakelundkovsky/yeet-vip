@@ -1,22 +1,28 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn } from "typeorm"
+import {
+    Entity,
+    PrimaryGeneratedColumn,
+    Column,
+    CreateDateColumn,
+    UpdateDateColumn,
+} from 'typeorm';
 
 @Entity('users')
 export class User {
-    @PrimaryGeneratedColumn("uuid", { name: "id" })
-    id!: string
+    @PrimaryGeneratedColumn('uuid', { name: 'id' })
+    id!: string;
 
     @Column()
-    name!: string
+    name!: string;
 
     @Column({ unique: true })
-    email!: string
+    email!: string;
 
-    @Column({ type: "decimal", precision: 10, scale: 2, default: 0 })
-    balance!: number
+    @Column({ type: 'decimal', precision: 10, scale: 2, default: 0 })
+    balance!: number;
 
-    @CreateDateColumn({ name: "created_at" })
-    createdAt!: Date
+    @CreateDateColumn({ name: 'created_at' })
+    createdAt!: Date;
 
-    @UpdateDateColumn({ name: "updated_at" })
-    updatedAt!: Date
-} 
+    @UpdateDateColumn({ name: 'updated_at' })
+    updatedAt!: Date;
+}

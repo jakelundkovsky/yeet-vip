@@ -117,7 +117,7 @@ Response:
 
 #### Credit/Debit User Balance
 ```http
-POST /api/users/:userId/credit
+POST /api/users/:userId/update-balance
 ```
 
 Parameters:
@@ -132,7 +132,7 @@ Request Body:
 
 Example Request:
 ```http
-POST /api/users/123e4567-e89b-12d3-a456-426614174000/credit
+POST /api/users/123e4567-e89b-12d3-a456-426614174000/update-balance
 Content-Type: application/json
 
 {
@@ -142,7 +142,7 @@ Content-Type: application/json
 
 Example Debit Request:
 ```http
-POST /api/users/123e4567-e89b-12d3-a456-426614174000/credit
+POST /api/users/123e4567-e89b-12d3-a456-426614174000/update-balance
 Content-Type: application/json
 
 {
@@ -187,9 +187,9 @@ Error Responses:
   }
   ```
 
-#### Get User Transactions
+#### Get Transactions For User
 ```http
-GET /api/users/:userId/transactions
+GET /api/transactions/user/:userId
 ```
 
 Parameters:
@@ -197,7 +197,7 @@ Parameters:
 
 Example Request:
 ```http
-GET /api/users/123e4567-e89b-12d3-a456-426614174000/transactions
+GET /api/transactions/user/123e4567-e89b-12d3-a456-426614174000
 ```
 
 Response:

@@ -1,10 +1,10 @@
-import Image from "next/image";
-import { notFound } from "next/navigation";
-import { Metadata } from "next";
+import Image from 'next/image';
+import { notFound } from 'next/navigation';
+import { Metadata } from 'next';
 
-import { TransactionTable } from "@/app/admin/users/[userId]/components/transaction-table";
-import Logo from "@/app/static/logo.jpg";
-import { getUser, getUserTransactions, toMoneyString } from "@/app/utils";
+import { TransactionTable } from '@/app/admin/users/[userId]/components/transaction-table';
+import Logo from '@/app/static/logo.jpg';
+import { getUser, getUserTransactions, toMoneyString } from '@/app/utils';
 
 type Props = {
   params: Promise<{ userId: string }>;
@@ -16,12 +16,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   
   if (!user) {
     return {
-      title: "User Not Found | VIP Admin | Yeet"
+      title: 'User Not Found | VIP Admin | Yeet',
     };
   }
 
   return {
-    title: `${user.name} | VIP Admin | Yeet`
+    title: `${user.name} | VIP Admin | Yeet`,
   };
 }
 

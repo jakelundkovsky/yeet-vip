@@ -18,5 +18,4 @@ export class UsersTable1747223500925 implements MigrationInterface {
     public async down(): Promise<void> {
         // no-op
     }
-
 }

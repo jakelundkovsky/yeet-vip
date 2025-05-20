@@ -1,6 +1,5 @@
 #!/bin/bash
 
-# Function to wait for database to be ready
 wait_for_db() {
     echo "⏳ Waiting for database to be ready..."
     while ! docker-compose exec postgres pg_isready -U postgres > /dev/null 2>&1; do
@@ -10,7 +9,6 @@ wait_for_db() {
     echo "✅ Database is ready!"
 }
 
-# Function to wait for backend to be ready
 wait_for_backend() {
     echo "⏳ Waiting for backend to be ready..."
     while ! curl -s http://localhost:3001/health > /dev/null 2>&1; do
@@ -18,6 +16,11 @@ wait_for_backend() {
         sleep 2
     done
     echo "✅ Backend is ready!"
+}
+
+open_browser() {
+    echo "🌐 Opening browser to http://localhost:3000/admin"
+    open "http://localhost:3000/admin"
 }
 
 case "$1" in
@@ -32,6 +35,7 @@ case "$1" in
     echo "✅ All services are ready!"
     echo "📱 Frontend: http://localhost:3000"
     echo "🔌 Backend API: http://localhost:3001"
+    open_browser
     ;;
     
   "down")
@@ -148,9 +152,7 @@ case "$1" in
     echo "📱 Frontend: http://localhost:3000"
     echo "🔌 Backend API: http://localhost:3001"
 
-    # Open browser after everything is ready
-    echo "🌐 Opening browser to http://localhost:3000"
-    open "http://localhost:3000"
+    open_browser
     ;;
     
   *)

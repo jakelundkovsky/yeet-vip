@@ -4,11 +4,11 @@ import express, { json } from 'express';
 
 import { AppDataSource } from './data-source';
 import usersRouter from './routes/users';
+import transactionsRouter from './routes/transactions';
 
 // load environment variables
 config();
 
-// initialize express app
 const app = express();
 const PORT = process.env['PORT'] || 3001;
 
@@ -21,22 +21,23 @@ app.use(cors({
 }));
 app.use(json());
 
-// health check endpoint
 app.get('/health', async (_, res) => {
   try {
     if (!AppDataSource.isInitialized) {
       await AppDataSource.initialize();
     }
-    // Test database connection
     await AppDataSource.query('SELECT 1');
     res.status(200).json({ status: 'healthy' });
-  } catch (error: any) {
-    res.status(500).json({ status: 'unhealthy', error: error.message });
+  } catch (error) {
+    res.status(500).json({
+      status: 'unhealthy',
+      error: error instanceof Error ? error.message : 'Unknown error',
+    });
   }
 });
 
-// mount user routes
 app.use('/api/users', usersRouter);
+app.use('/api/transactions', transactionsRouter);
 
 // start the server
 app.listen(PORT, () => {

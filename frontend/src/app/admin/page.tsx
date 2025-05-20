@@ -1,9 +1,9 @@
-import { AdminPanel } from "@/app/admin/components/admin-panel";
-import { getUsers } from "@/app/utils";
-import { Metadata } from "next";
+import { AdminPanel } from '@/app/admin/components/admin-panel';
+import { getUsers } from '@/app/utils';
+import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: "VIP Admin | Yeet",
+  title: 'VIP Admin | Yeet',
 };
 
 export default async function AdminPage() {

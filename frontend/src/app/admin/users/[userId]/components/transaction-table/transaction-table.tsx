@@ -1,8 +1,8 @@
 'use client';
 
-import { Transaction } from "@/app/types";
-import { toMoneyString } from "@/app/utils";
-import { useEffect, useState } from "react";
+import { Transaction } from '@/app/types';
+import { toMoneyString } from '@/app/utils';
+import { useEffect, useState } from 'react';
 
 interface Props {
     transactions: Transaction[];

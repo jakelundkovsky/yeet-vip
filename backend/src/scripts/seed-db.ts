@@ -1,13 +1,13 @@
-import { faker } from "@faker-js/faker";
+import { faker } from '@faker-js/faker';
 
-import { AppDataSource } from "../data-source";
-import { Transaction, TransactionType } from "../entities/transaction";
-import { User } from "../entities/user";
+import { AppDataSource } from '../data-source';
+import { Transaction, TransactionType } from '../entities/transaction';
+import { User } from '../entities/user';
 
 async function seed() {
     try {
         await AppDataSource.initialize();
-        console.log("Connected to database");
+        console.log('Connected to database');
 
         // Create 1000 users
         const users = await Promise.all(
@@ -22,7 +22,7 @@ async function seed() {
             })
         )
 
-        console.log("Created 1000 users");
+        console.log('Created 1000 users');
 
         // Create transactions for each user
         for (const user of users) {
@@ -99,11 +99,11 @@ async function seed() {
             await AppDataSource.manager.save(user);
         }
 
-        console.log("Created transactions for all users");
+        console.log('Created transactions for all users');
         await AppDataSource.destroy();
-        console.log("Database connection closed");
+        console.log('Database connection closed');
     } catch (error) {
-        console.error("Error seeding database:", error);
+        console.error('Error seeding database:', error);
         process.exit(1);
     }
 }

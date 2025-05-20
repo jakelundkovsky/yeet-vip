@@ -5,7 +5,7 @@ import { Transaction } from '../../entities/transaction';
 
 const router = Router();
 
-router.get('/:userId/transactions', async (req, res) => {
+router.get('/user/:userId', async (req, res) => {
     try {
         const { userId } = req.params;
         const transactionRepository = AppDataSource.getRepository(Transaction);

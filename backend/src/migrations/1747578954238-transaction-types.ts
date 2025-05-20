@@ -11,5 +11,4 @@ export class TransactionTypes1747578954238 implements MigrationInterface {
     public async down(): Promise<void> {
         // no-op
     }
-
 }
