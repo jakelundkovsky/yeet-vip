@@ -43,12 +43,26 @@ export function UserTable({ users: initialUsers, pagination: initialPagination }
 
   useEffect(() => {
     const fetchSortedUsers = async () => {
-      const { users: sortedUsers, pagination: newPagination } = await fetchUsers(sortBy, sortOrder, currentPage);
-      setUsers(sortedUsers);
-      setPagination(newPagination);
+      // Skip fetch on initial mount since we already have the data
+      if (
+        initialUsers.length > 0
+        && sortBy === 'createdAt'
+        && sortOrder === 'DESC'
+        && currentPage === 1
+      ) {
+        return;
+      }
+      
+      try {
+        const { users: sortedUsers, pagination: newPagination } = await fetchUsers(sortBy, sortOrder, currentPage);
+        setUsers(sortedUsers);
+        setPagination(newPagination);
+      } catch (error) {
+        toast.error('Failed to fetch users');
+      }
     };
     fetchSortedUsers();
-  }, [sortBy, sortOrder, currentPage]);
+  }, [sortBy, sortOrder, currentPage, initialUsers]);
 
   const currentUsers = users;
 
