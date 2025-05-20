@@ -8,12 +8,34 @@ const router = Router();
 router.get('/:userId', async (req, res) => {
     try {
         const { userId } = req.params;
+
+        if (!userId) {
+            return res.status(400).json({
+                user: null,
+                error: 'User ID is required'
+            });
+        }
+
         const userRepository = AppDataSource.getRepository(User);
         const user = await userRepository.findOne({ where: { id: userId } });
-        res.json({ user });
+
+        if (!user) {
+            return res.status(404).json({
+                user: null,
+                error: 'User not found'
+            });
+        }
+
+        return res.json({
+            user,
+            error: null
+        });
     } catch (error) {
         console.error('Error fetching user:', error);
-        res.status(500).json({ error: 'Internal server error' });
+        return res.status(500).json({
+            user: null,
+            error: 'Internal server error'
+        });
     }
 });
 

@@ -12,7 +12,17 @@ router.put('/:userId/update-balance', async (req: Request, res: Response) => {
         const { amount } = req.body;
 
         if (!amount) {
-            return res.status(400).json({ error: 'Amount is required' });
+            return res.status(400).json({
+                newBalance: null,
+                transactionId: null,
+                error: 'Amount is required',
+            });
+        } else if (!userId) {
+            return res.status(400).json({
+                newBalance: null,
+                transactionId: null,
+                error: 'User ID is required',
+            });
         }
 
         const userRepository = AppDataSource.getRepository(User);
@@ -20,15 +30,19 @@ router.put('/:userId/update-balance', async (req: Request, res: Response) => {
 
         const user = await userRepository.findOne({ where: { id: userId } });
         if (!user) {
-            return res.status(404).json({ error: 'User not found' });
+            return res.status(404).json({
+                newBalance: null,
+                transactionId: null,
+                error: 'User not found',
+            });
         }
 
         const newBalance = Number(user.balance) + Number(amount);
         if (newBalance < 0) {
             return res.status(400).json({ 
+                newBalance: null,
+                transactionId: null,
                 error: 'Insufficient funds',
-                currentBalance: user.balance,
-                requestedDebit: Math.abs(amount)
             });
         }
 
@@ -44,17 +58,18 @@ router.put('/:userId/update-balance', async (req: Request, res: Response) => {
         });
         await transactionRepository.save(transaction);
 
-        const action = amount > 0 ? 'Credited' : 'Debited';
-        res.json({ 
-            message: `${action} ${Math.abs(amount)} to user ${userId}`,
+        return res.json({ 
             newBalance: user.balance,
-            transaction
+            transactionId: transaction.id,
+            error: null
         });
-        return;
     } catch (error) {
         console.error('Error processing transaction:', error);
-        res.status(500).json({ error: 'Internal server error' });
-        return;
+        return res.status(500).json({
+            newBalance: null,
+            transactionId: null,
+            error: 'Internal server error'
+        });
     }
 });
 

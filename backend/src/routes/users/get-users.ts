@@ -17,12 +17,19 @@ router.get('/', async (req, res) => {
         // Validate sort parameters
         const allowedSortFields = ['name', 'email', 'balance', 'createdAt'];
         if (!allowedSortFields.includes(sortBy)) {
-            return res.status(400).json({ error: 'Invalid sort field' });
+            return res.status(400).json({
+                users: [],
+                pagination: null,
+                error: 'Invalid sort field'
+            });
         }
         if (!['ASC', 'DESC'].includes(sortOrder)) {
-            return res.status(400).json({ error: 'Invalid sort order' });
+            return res.status(400).json({
+                users: [],
+                pagination: null,
+                error: 'Invalid sort order'
+            });
         }
-
         const skip = (page - 1) * limit;
         const total = await userRepository.count();
         const users = await userRepository.find({
@@ -31,20 +38,23 @@ router.get('/', async (req, res) => {
             order: { [sortBy]: sortOrder }
         });
 
-        res.json({
+        return res.json({
             users,
             pagination: {
                 currentPage: page,
                 totalPages: Math.ceil(total / limit),
                 totalItems: total,
                 itemsPerPage: limit
-            }
+            },
+            error: null,
         });
-        return;
     } catch (error) {
         console.error('Error fetching users:', error);
-        res.status(500).json({ error: 'Internal server error' });
-        return;
+        return res.status(500).json({
+            users: [],
+            pagination: null,
+            error: 'Internal server error'
+        });
     }
 });
 

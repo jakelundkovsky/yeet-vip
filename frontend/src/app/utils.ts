@@ -61,9 +61,16 @@ export async function getUsers(sortBy?: string, sortOrder?: 'ASC' | 'DESC', page
     }
 }> {
     const params = new URLSearchParams();
-    if (sortBy) params.append('sortBy', sortBy);
-    if (sortOrder) params.append('sortOrder', sortOrder);
-    if (page) params.append('page', page.toString());
+    
+    if (sortBy) {
+        params.append('sortBy', sortBy);
+    }
+    if (sortOrder) {
+        params.append('sortOrder', sortOrder);
+    }
+    if (page) {
+        params.append('page', page.toString());
+    }
 
     const queryString = params.toString();
     const res = await fetchWithError(`/users${queryString ? `?${queryString}` : ''}`);
