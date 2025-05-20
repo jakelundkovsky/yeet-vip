@@ -6,7 +6,7 @@ import CurrencyInput from 'react-currency-input-field';
 
 import { fetchUsers } from "@/app/actions";
 import { User } from "@/app/types";
-import { toMoneyString, updateUserCredit } from "@/app/utils";
+import { toMoneyString, updateUserBalance } from "@/app/utils";
 
 function FormattedDate({ date }: { date: string }) {
   const [formattedDate, setFormattedDate] = useState<string>("");
@@ -78,7 +78,7 @@ export function UserTable({ users: initialUsers, pagination: initialPagination }
   const handleConfirm = async () => {
     if (selectedUser) {
       try {
-        await updateUserCredit(selectedUser.id, amount);
+        await updateUserBalance(selectedUser.id, amount);
 
         // Refetch users to update the table
         const { users: updatedUsers, pagination: newPagination } = await fetchUsers(sortBy, sortOrder, currentPage);

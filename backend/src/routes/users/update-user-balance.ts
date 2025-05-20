@@ -25,50 +25,55 @@ router.put('/:userId/balance', async (req: Request, res: Response) => {
             });
         }
 
-        const userRepository = AppDataSource.getRepository(User);
-        const transactionRepository = AppDataSource.getRepository(Transaction);
+        // Note: Must update user balance and create transaction record in the same DB transaction
+        // -- to prevent drift. In production, we'd likely want to run periodic reconciliation
+        // -- for redundancy
+        const result = await AppDataSource.transaction(async (transactionalEntityManager) => {
+            const userRepository = transactionalEntityManager.getRepository(User);
+            const transactionRepository = transactionalEntityManager.getRepository(Transaction);
 
-        const user = await userRepository.findOne({ where: { id: userId } });
-        if (!user) {
-            return res.status(404).json({
-                newBalance: null,
-                transactionId: null,
-                error: 'User not found',
+            const user = await userRepository.findOne({ where: { id: userId } });
+            if (!user) {
+                throw new Error('User not found');
+            }
+
+            // prevent javascript floating point precision issues
+            const newBalance = Number((Number(user.balance) + Number(amount)).toFixed(2));
+            
+            if (newBalance < 0) {
+                throw new Error('Insufficient funds');
+            }
+
+            // Update user balance
+            user.balance = newBalance;
+            await userRepository.save(user);
+
+            // Create transaction record
+            const transaction = transactionRepository.create({
+                userId,
+                amount,
+                type: TransactionType.ADMIN_ADJUST
             });
-        }
+            await transactionRepository.save(transaction);
 
-        const newBalance = Number(user.balance) + Number(amount);
-        if (newBalance < 0) {
-            return res.status(400).json({ 
-                newBalance: null,
-                transactionId: null,
-                error: 'Insufficient funds',
-            });
-        }
-
-        // Update user balance
-        user.balance = newBalance;
-        await userRepository.save(user);
-
-        // Create transaction record
-        const transaction = transactionRepository.create({
-            userId,
-            amount,
-            type: TransactionType.ADMIN_ADJUST
+            return { user, transaction };
         });
-        await transactionRepository.save(transaction);
 
         return res.json({ 
-            newBalance: user.balance,
-            transactionId: transaction.id,
+            newBalance: result.user.balance,
+            transactionId: result.transaction.id,
             error: null
         });
     } catch (error) {
         console.error('Error processing transaction:', error);
-        return res.status(500).json({
+        const errorMessage = error instanceof Error ? error.message : 'Internal server error';
+        const statusCode = errorMessage === 'User not found' ? 404 : 
+                          errorMessage === 'Insufficient funds' ? 400 : 500;
+        
+        return res.status(statusCode).json({
             newBalance: null,
             transactionId: null,
-            error: 'Internal server error'
+            error: errorMessage
         });
     }
 });

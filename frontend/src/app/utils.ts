@@ -81,7 +81,7 @@ export async function getUserTransactions(userId: string): Promise<Transaction[]
     return data?.transactions || [];
 }
 
-export async function updateUserCredit(userId: string, amount: number): Promise<void> {
+export async function updateUserBalance(userId: string, amount: number): Promise<void> {
     await fetchWithError(`/users/${userId}/balance`, {
         method: 'PUT',
         body: JSON.stringify({ amount }),
