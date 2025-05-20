@@ -77,7 +77,8 @@ Response:
       "name": "John Doe",
       "email": "john@example.com",
       "balance": 1000.50,
-      "createdAt": "2024-03-20T15:30:00Z"
+      "createdAt": "2024-03-20T15:30:00Z",
+      "updatedAt": "2024-04-20T15:30:00Z"
     }
   ],
   "pagination": {
@@ -85,7 +86,8 @@ Response:
     "totalPages": 5,
     "totalItems": 50,
     "itemsPerPage": 10
-  }
+  },
+  "error": null
 }
 ```
 
@@ -110,8 +112,10 @@ Response:
     "name": "John Doe",
     "email": "john@example.com",
     "balance": 1000.50,
-    "createdAt": "2024-03-20T15:30:00Z"
-  }
+    "createdAt": "2024-03-20T15:30:00Z",
+    "updatedAt": "2024-04-20T15:30:00Z"
+  },
+  "error": null
 }
 ```
 
@@ -153,15 +157,9 @@ Content-Type: application/json
 Response:
 ```json
 {
-  "message": "Credited $50.25 to user 123e4567-e89b-12d3-a456-426614174000",
   "newBalance": 1050.75,
-  "transaction": {
-    "id": "987fcdeb-51a2-3e4b-9876-543210987654",
-    "userId": "123e4567-e89b-12d3-a456-426614174000",
-    "amount": 50.25,
-    "type": "ADMIN_ADJUST",
-    "createdAt": "2024-03-20T15:35:00Z"
-  }
+  "transactionId": "987fcdeb-51a2-3e4b-9876-543210987654",
+  "error": null,
 }
 ```
 
@@ -170,20 +168,24 @@ Error Responses:
   ```json
   {
     "error": "Insufficient funds",
-    "currentBalance": 100.00,
-    "requestedDebit": 150.00
+    "transactionId": null,
+    "newBalance": null
   }
   ```
 - 404: User not found
   ```json
   {
-    "error": "User not found"
+    "error": "User not found",
+    "transactionId": null,
+    "newBalance": null
   }
   ```
 - 500: Internal server error
   ```json
   {
-    "error": "Internal server error"
+    "error": "Internal server error",
+    "transactionId": null,
+    "newBalance": null
   }
   ```
 
@@ -209,16 +211,19 @@ Response:
       "userId": "123e4567-e89b-12d3-a456-426614174000",
       "amount": 50.25,
       "type": "ADMIN_ADJUST",
-      "createdAt": "2024-03-20T15:35:00Z"
+      "createdAt": "2024-03-20T15:35:00Z",
+      "updatedAt": "2024-04-20T15:30:00Z"
     },
     {
       "id": "456abcde-12f3-4g5h-ijkl-987654321012",
       "userId": "123e4567-e89b-12d3-a456-426614174000",
       "amount": -25.50,
       "type": "ADMIN_ADJUST",
-      "createdAt": "2024-03-20T14:30:00Z"
+      "createdAt": "2024-03-20T14:30:00Z",
+      "updatedAt": "2024-04-20T15:30:00Z"
     }
-  ]
+  ],
+  "error": null
 }
 ```
 
