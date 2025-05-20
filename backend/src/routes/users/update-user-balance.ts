@@ -6,7 +6,7 @@ import { User } from '../../entities/user';
 
 const router = Router();
 
-router.put('/:userId/update-balance', async (req: Request, res: Response) => {
+router.put('/:userId/balance', async (req: Request, res: Response) => {
     try {
         const { userId } = req.params;
         const { amount } = req.body;
