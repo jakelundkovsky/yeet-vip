@@ -116,17 +116,46 @@ export function UserTable({ users: initialUsers, pagination: initialPagination }
     setPagination(newPagination);
   };
 
+  const headerClassName = "px-3 py-2 text-left text-gray-200 bg-gray-700 text-xs flex items-center h-10";
+  const cellClassName = "px-3 py-2 text-gray-300 truncate flex items-center";
+
+  const columnData = [
+    {
+      name: 'ID',
+      className: headerClassName,
+    },
+    {
+      name: 'Name',
+      sortField: 'name',
+    },
+    {
+      name: 'Email',
+      sortField: 'email',
+    },
+    {
+      name: 'Balance',
+      sortField: 'balance',
+    },
+    {
+      name: 'Member Since',
+      sortField: 'createdAt',
+    },
+    {
+      name: 'Actions',
+      className: headerClassName,
+    },
+  ];
+
   if (!currentUsers?.length) {
     return (
       <div className="overflow-x-auto h-full flex flex-col rounded-lg">
         <div className="min-w-full w-full bg-gray-800 border border-gray-700 flex-1 rounded-lg">
           <div className="grid grid-cols-[1.5fr_1.2fr_1fr_1fr_1fr_1.2fr] w-full">
-            <div className="px-3 py-2 text-left text-gray-200 bg-gray-700 text-xs flex items-center h-10">ID</div>
-            <div className="px-3 py-2 text-left text-gray-200 bg-gray-700 text-xs flex items-center h-10">Name</div>
-            <div className="px-3 py-2 text-left text-gray-200 bg-gray-700 text-xs flex items-center h-10">Email</div>
-            <div className="px-3 py-2 text-left text-gray-200 bg-gray-700 text-xs flex items-center h-10">Balance</div>
-            <div className="px-3 py-2 text-left text-gray-200 bg-gray-700 text-xs flex items-center h-10">Member Since</div>
-            <div className="px-3 py-2 text-left text-gray-200 bg-gray-700 text-xs flex items-center h-10">Actions</div>
+            {columnData.map((column) => (
+              <div key={column.name} className={headerClassName}>
+                {column.name}
+              </div>
+            ))}
           </div>
           <div className="grid grid-cols-1 place-items-center h-32">
             <span className="text-gray-400 text-sm">No users yet</span>
@@ -141,36 +170,16 @@ export function UserTable({ users: initialUsers, pagination: initialPagination }
       <div className="overflow-x-auto h-full flex flex-col">
         <div className="min-w-full w-full bg-gray-800 border border-gray-700 rounded-lg flex-1">
           <div className="grid grid-cols-[1.5fr_1.2fr_1fr_1fr_1fr_1.2fr] w-full">
-            <div className="px-3 py-2 text-left text-gray-200 bg-gray-700 text-xs flex items-center h-10">ID</div>
-            <div 
-              className="px-3 py-2 text-left text-gray-200 bg-gray-700 text-xs cursor-pointer hover:bg-gray-600 flex items-center h-10"
-              onClick={() => handleSort('name')}
-            >
-              <span>Name</span>
-              <SortIcon field="name" />
-            </div>
-            <div 
-              className="px-3 py-2 text-left text-gray-200 bg-gray-700 text-xs cursor-pointer hover:bg-gray-600 flex items-center h-10"
-              onClick={() => handleSort('email')}
-            >
-              <span>Email</span>
-              <SortIcon field="email" />
-            </div>
-            <div 
-              className="px-3 py-2 text-left text-gray-200 bg-gray-700 text-xs cursor-pointer hover:bg-gray-600 flex items-center h-10"
-              onClick={() => handleSort('balance')}
-            >
-              <span>Balance</span>
-              <SortIcon field="balance" />
-            </div>
-            <div 
-              className="px-3 py-2 text-left text-gray-200 bg-gray-700 text-xs cursor-pointer hover:bg-gray-600 flex items-center h-10"
-              onClick={() => handleSort('createdAt')}
-            >
-              <span>Member Since</span>
-              <SortIcon field="createdAt" />
-            </div>
-            <div className="px-3 py-2 text-left text-gray-200 bg-gray-700 text-xs flex items-center h-10">Actions</div>
+            {columnData.map((column) => (
+              <div
+                key={column.name}
+                className={`${headerClassName} ${column.sortField ? 'cursor-pointer hover:bg-gray-600' : ''}`}
+                onClick={column.sortField ? () => handleSort(column.sortField) : undefined}
+              >
+                {column.name}
+                {column.sortField && <SortIcon field={column.sortField} />}
+              </div>
+            ))}
           </div>
           {currentUsers.map((user) => (
             <div
@@ -178,22 +187,22 @@ export function UserTable({ users: initialUsers, pagination: initialPagination }
               className="grid grid-cols-[1.5fr_1.2fr_1fr_1fr_1fr_1.2fr] border-t border-gray-700 hover:bg-gray-700 cursor-pointer text-xs h-10"
               onClick={() => window.open(`/admin/users/${user.id}`, '_blank')}
             >
-              <div className="px-3 py-2 text-gray-300 truncate flex items-center" title={user.id}>
+              <div className={cellClassName} title={user.id}>
                 {user.id}
               </div>
-              <div className="px-3 py-2 text-gray-300 truncate flex items-center" title={user.name}>
+              <div className={cellClassName} title={user.name}>
                 {user.name}
               </div>
-              <div className="px-3 py-2 text-gray-300 truncate flex items-center" title={user.email}>
+              <div className={cellClassName} title={user.email}>
                 {user.email}
               </div>
-              <div className="px-3 py-2 text-gray-300 flex items-center">
+              <div className={cellClassName}>
                 {toMoneyString(user.balance)}
               </div>
-              <div className="px-3 py-2 text-gray-300 flex items-center">
+              <div className={cellClassName}>
                 <FormattedDate date={user.createdAt} />
               </div>
-              <div className="px-3 py-2 text-gray-300 flex items-center" onClick={e => e.stopPropagation()}>
+              <div className={cellClassName} onClick={e => e.stopPropagation()}>
                 <div className="flex items-center gap-1 w-full h-6">
                   {editingUserId === user.id ? (
                     <>
