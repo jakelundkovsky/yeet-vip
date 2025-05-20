@@ -4,22 +4,19 @@ const isServer = typeof window === 'undefined';
 
 function getBaseUrl() {
     if (isServer) {
-        // Server-side: use internal Docker network
         return 'http://backend:3001/api';
     }
-    // Client-side: use the environment variable or fallback
+
     return process.env.NEXT_PUBLIC_API_URL 
         ? `${process.env.NEXT_PUBLIC_API_URL}/api` 
         : 'http://localhost:3001/api';
 }
 
-// Default fetch options to ensure consistent behavior
 const defaultFetchOptions: RequestInit = {
     headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
     },
-    // Only include credentials on client-side
     ...(isServer ? {} : { credentials: 'include' }),
     cache: 'no-store'
 };
@@ -48,7 +45,7 @@ async function fetchWithError(url: string, options: RequestInit = {}): Promise<R
 export async function getUser(userId: string): Promise<User> {
     const res = await fetchWithError(`/users/${userId}`);
     const data = await res.json();
-    return data.user;
+    return data?.user || null;
 }
 
 export async function getUsers(sortBy?: string, sortOrder?: 'ASC' | 'DESC', page?: number): Promise<{
@@ -59,6 +56,7 @@ export async function getUsers(sortBy?: string, sortOrder?: 'ASC' | 'DESC', page
         totalItems: number;
         itemsPerPage: number;
     }
+    error: string | null;
 }> {
     const params = new URLSearchParams();
     
@@ -80,7 +78,7 @@ export async function getUsers(sortBy?: string, sortOrder?: 'ASC' | 'DESC', page
 export async function getUserTransactions(userId: string): Promise<Transaction[]> {
     const res = await fetchWithError(`/transactions/user/${userId}`);
     const data = await res.json();
-    return data.transactions;
+    return data?.transactions || [];
 }
 
 export async function updateUserCredit(userId: string, amount: number): Promise<void> {
