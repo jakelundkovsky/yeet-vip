@@ -39,6 +39,8 @@ export function UserTable({ users: initialUsers, pagination: initialPagination }
   const [sortOrder, setSortOrder] = useState<'ASC' | 'DESC'>('DESC');
   const [currentPage, setCurrentPage] = useState(pagination.currentPage);
 
+  const isInsufficientFunds = amount < 0 && Number((Math.abs(amount) - (selectedUser?.balance || 0)).toFixed(2)) > 0;
+
   useEffect(() => {
     const fetchSortedUsers = async () => {
       const { users: sortedUsers, pagination: newPagination } = await fetchUsers(sortBy, sortOrder, currentPage);
@@ -187,11 +189,13 @@ export function UserTable({ users: initialUsers, pagination: initialPagination }
                     <>
                       <CurrencyInput
                         placeholder="Amount"
-                        className="w-24 px-1 py-0.5 bg-gray-700 text-white rounded border border-gray-600 text-xs h-6"
+                        className={`w-24 px-1 py-0.5 bg-gray-700 text-white rounded border ${
+                          isInsufficientFunds ? 'border-red-500 ring-1 ring-red-500' : 'border-gray-600'
+                        } text-xs h-6`}
                         decimalsLimit={2}
                         prefix="$"
                         onValueChange={(value) => {
-                          setAmount(value ? Number(value) : 0);
+                          setAmount(value ? Number(Number(value).toFixed(2)) : 0);
                           setSelectedUser(user);
                         }}
                         allowNegativeValue={true}
@@ -199,8 +203,12 @@ export function UserTable({ users: initialUsers, pagination: initialPagination }
                       />
                       <button
                         onClick={handleApplyCredit}
-                        className="bg-green-600 hover:bg-green-700 text-white px-1.5 py-0.5 rounded text-sm border border-green-400 shadow-sm font-bold focus:outline-none focus:ring-2 focus:ring-green-400 cursor-pointer ml-1 mr-0.5 h-6"
-                        disabled={!amount}
+                        className={`px-1.5 py-0.5 rounded text-sm border shadow-sm font-bold focus:outline-none focus:ring-2 cursor-pointer ml-1 mr-0.5 h-6 ${
+                          !amount || isInsufficientFunds
+                            ? 'bg-gray-500 border-gray-400 text-gray-300 cursor-not-allowed'
+                            : 'bg-green-600 hover:bg-green-700 text-white border-green-400 focus:ring-green-400'
+                        }`}
+                        disabled={!amount || isInsufficientFunds}
                         title="Apply"
                       >
                         <span className="text-white">✓</span>
