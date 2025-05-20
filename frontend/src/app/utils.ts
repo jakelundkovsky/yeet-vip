@@ -78,7 +78,7 @@ export async function getUserTransactions(userId: string): Promise<Transaction[]
 
 export async function updateUserCredit(userId: string, amount: number): Promise<void> {
     await fetchWithError(`/users/${userId}/update-balance`, {
-        method: 'POST',
+        method: 'PUT',
         body: JSON.stringify({ amount }),
     });
 }

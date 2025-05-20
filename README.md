@@ -117,7 +117,7 @@ Response:
 
 #### Credit/Debit User Balance
 ```http
-POST /api/users/:userId/update-balance
+PUT /api/users/:userId/update-balance
 ```
 
 Parameters:
@@ -132,7 +132,7 @@ Request Body:
 
 Example Request:
 ```http
-POST /api/users/123e4567-e89b-12d3-a456-426614174000/update-balance
+PUT /api/users/123e4567-e89b-12d3-a456-426614174000/update-balance
 Content-Type: application/json
 
 {
@@ -142,7 +142,7 @@ Content-Type: application/json
 
 Example Debit Request:
 ```http
-POST /api/users/123e4567-e89b-12d3-a456-426614174000/update-balance
+PUT /api/users/123e4567-e89b-12d3-a456-426614174000/update-balance
 Content-Type: application/json
 
 {
