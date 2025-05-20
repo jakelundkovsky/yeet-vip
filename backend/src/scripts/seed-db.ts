@@ -36,10 +36,11 @@ async function seed() {
             deposit.user = user;
             deposit.userId = user.id;
             deposit.type = TransactionType.DEPOSIT;
-            deposit.createdAt = faker.date.between({
+            const depositDate = faker.date.between({
                 from: user.createdAt,
-                to: new Date(user.createdAt.getTime() + 60 * 60 * 1000),
+                to: new Date(),
             });
+            deposit.createdAt = depositDate;
             allTransactions.push(deposit);
             totalBalance += initialDeposit;
 
@@ -62,7 +63,7 @@ async function seed() {
                             ? TransactionType.BET 
                             : TransactionType.WITHDRAW;
                         transaction.createdAt = faker.date.between({
-                            from: deposit.createdAt,
+                            from: depositDate,
                             to: new Date(),
                         });
                         allTransactions.push(transaction);
@@ -78,7 +79,7 @@ async function seed() {
                         ? TransactionType.WIN
                         : TransactionType.DEPOSIT;
                     transaction.createdAt = faker.date.between({
-                        from: user.createdAt,
+                        from: depositDate,
                         to: new Date(),
                     });
                     allTransactions.push(transaction);
