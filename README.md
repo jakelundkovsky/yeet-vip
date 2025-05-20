@@ -263,27 +263,28 @@ Response:
 *Note: Current decimal precision is optimized for fiat-like transactions. For specific cryptocurrencies (especially those requiring atomic unit precision like satoshis/wei), the decimal handling strategy would need to be adjusted to use BigInt and chain-specific decimal places.
 
 #### Key Design Choices
-- UUID primary keys for enhanced security and distributed scalability
-- Timestamps on all records for comprehensive audit trail
-- Enum types for transaction categorization
-- Many-to-one relationship between transactions and users
+- UUID primary keys for better security
+- Timestamps on all records for auditing
 - Balance stored directly on user record for quick access
+  - Balance updates must be completed in same DB transaction to prevent drift
+  - Might also consider running periodic reconciliation for redundancy
 - Full transaction history maintained for compliance and reconciliation
-
-### Current Design Decisions
 - Server Components for initial loads, Client Components for interactivity
-- UUID-based identifiers to prevent enumeration attacks
 - Decimal(10,2) for financial calculations*
-- Transaction log as source of truth for all balance changes
 
 *Note: Current decimal precision is optimized for fiat-like transactions. For specific cryptocurrencies (especially those requiring atomic unit precision like satoshis/wei), the decimal handling strategy would need to be adjusted to use BigInt and chain-specific decimal places.
 
 ### Known Limitations
-- Poll-based updates (no real-time)
-- Basic rate limiting implementation
-- Limited transaction rollback support
-- Potential race conditions during high-frequency balance updates
-- No automatic balance-to-transaction reconciliation
+- Frontend
+  - Not responsive design
+  - Errors/Toasts more descriptive
+  - Reuse / build component library for consistent site feel
+- Backend
+  - REST / Poll-based updates (no real-time)
+  - Limited transaction rollback support
+  - Potential race conditions during high-frequency balance updates
+  - No automatic balance-to-transaction reconciliation
+  - Minimal Security 
 
 ### Future Roadmap
 
@@ -291,6 +292,7 @@ Response:
 - Enhanced account security (2FA, account freezing)
 - Comprehensive input validation
 - User Authentication
+- Better logging for audit
 
 #### Performance
 - Client-side search/filter capabilities
@@ -306,7 +308,6 @@ Response:
 - Cleaner design (leverage existing component libraries e.g. shadcn)
 
 #### Development
-- Type definitions cleanup
-- Security audit implementation
 - Automated reconciliation system
-- Monitoring / logging
+- General monitoring / logging
+- Prevent massive admin balance adjustments (will need to discuss how to prevent abuse)
